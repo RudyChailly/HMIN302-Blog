@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PostController!{% endblock %}
+{% block title %}Articles{% endblock %}
 
 {% block body %}
+    <a href="{{ path('article_new') }}">Create new</a>
     {% for article in articles %}
         <div class="border">
-            <h1> {{ article.title }}</h1>
+            <h1> <a href="{{ path('article_show', {'urlAlias': article.urlAlias}) }}"> {{ article.title }} </a> </h1>
             <div> {{ article.content }} </div>
-            <div> {{ article.published|date("m/d/Y") }}</div>
+            <div> {{ article.published|date("d/m/Y") }} à {{ article.published|date("H:i") }}</div>
         </div>
     {% endfor %}
 {% endblock %}
