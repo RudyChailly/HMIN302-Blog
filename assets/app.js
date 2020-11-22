@@ -9,6 +9,7 @@
 import './styles/app.css';
 
 import './styles/global.scss';
+//require('./styles/global.scss');
 
 const $ = require('jquery');
 require('bootstrap');
