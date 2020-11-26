@@ -9,8 +9,20 @@
     </head>
     <body>
         <header>
-            <a href="/user/new"> Inscription </a>
-            <a href="/login"> Connexion </a>
+            {%  if (app.user) %}
+                <div>
+                    <a href="/logout"> Déconnexion </a>
+                </div>
+            {% else  %}
+                <div>
+                    <a href="/user/new"> Inscription </a>
+                    <a href="/login"> Connexion </a>
+                </div>
+            {% endif %}
+            <div>
+                <a href="/article"> Articles </a>
+                <a href="/user"> User </a>
+            </div>
         </header>
         <main>
             {% block body %}{% endblock %}
