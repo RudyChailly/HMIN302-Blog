@@ -8,7 +8,14 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <a href="/user/new"> Inscription </a>
+            <a href="/login"> Connexion </a>
+        </header>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
