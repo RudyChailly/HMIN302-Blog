@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\User;
 use phpDocumentor\Reflection\Type;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +24,13 @@ class UserType extends AbstractType
                 'invalid_message' => 'Les mots de passes ne sont pas identiques.',
                 'first_options' => ['label' => 'password'],
                 'second_options' => ['label' => 'repeat password']
+            ])
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Super Admin' => ['Yes' => 'ROLE_SUPER_ADMIN'],
+                    'Admin' => ['Yes' => 'ROLE_ADMIN']
+                ],
+                'multiple' => true
             ])
         ;
     }

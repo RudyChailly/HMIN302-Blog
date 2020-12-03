@@ -21,7 +21,7 @@ class AppFixtures extends Fixture
         }
 
         // ARTICLE
-        for ($i = 0; $i < 20; $i++) {
+       /* for ($i = 0; $i < 20; $i++) {
             $article = new Article();
             $article->setTitle('article '.$i);
             $article->setUrlAlias('url-alias-'.$i);
@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
             $article->setPublished(new \DateTime('NOW'));
             $article->setCategory($categories[$i%5]);
             $manager->persist($article);
-        }
+        }*/
 
         $manager->flush();
     }

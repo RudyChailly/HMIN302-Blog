@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\ArticleType;
+use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +36,7 @@ class ArticleController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        //TODO WYSIWYG
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -55,12 +58,25 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/{urlAlias}", name="article_show", methods={"GET"})
+     * @Route("/{urlAlias}", name="article_show", methods={"GET", "POST"})
      */
-    public function show(Article $article): Response
+    public function show(Article $article, Request $request): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setPublished(new \DateTime('NOW'));
+            $comment->setAuthor($this->getUser());
+            $comment->setArticle($article);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
+        }
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'form' => $form->createView()
         ]);
     }
 

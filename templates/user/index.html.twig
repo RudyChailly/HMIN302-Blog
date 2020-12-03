@@ -25,8 +25,7 @@
                 <td>{{ user.password }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('user_show', {'username': user.username}) }}">show</a>
                 </td>
             </tr>
         {% else %}
