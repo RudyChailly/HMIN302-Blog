@@ -59,6 +59,11 @@ class Article
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $thumbnail;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -167,6 +172,18 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

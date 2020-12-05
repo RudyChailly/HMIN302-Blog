@@ -8,6 +8,7 @@
         <a href="{{ path('user_show', {'username': article.author.username}) }}">{{ article.author.username }}</a>
         <div>{{ article.published|date("d/m/Y") }} à {{ article.published|date("H:i") }}</div>
     </div>
+    <img src="{{ asset('uploads/article/' ~ article.thumbnail ) }}" alt="..."/>
     <p class="my-2"> {{ article.content }} </p>
 
     <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>

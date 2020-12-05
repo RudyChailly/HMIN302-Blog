@@ -1,0 +1,6 @@
+{% if (reportForm is defined) and (app.user is not null) and (user.id != app.user.id) %}
+{{ form_start(reportForm) }}
+    {{ form_widget(reportForm) }}
+    <button class="btn">{{ button_label|default('Report') }}</button>
+{{ form_end(reportForm) }}
+{% endif %}

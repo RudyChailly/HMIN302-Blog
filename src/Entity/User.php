@@ -65,12 +65,34 @@ class User implements UserInterface
      */
     private $followers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="author")
+     */
+    private $reportsUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="target")
+     */
+    private $reportedBy;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profilePicture;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $coverPicture;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->follows = new ArrayCollection();
         $this->followers = new ArrayCollection();
+        $this->reportsUser = new ArrayCollection();
+        $this->reportedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -277,5 +299,89 @@ class User implements UserInterface
 
     public function hasAccess(self $utilisateur) {
         return ($this->isAdmin() || ($this->getId() == $utilisateur->getId()));
+    }
+
+    /**
+     * @return Collection|ReportUser[]
+     */
+    public function getReportsUser(): Collection
+    {
+        return $this->reportsUser;
+    }
+
+    public function addReportsUser(ReportUser $reportsUser): self
+    {
+        if (!$this->reportsUser->contains($reportsUser)) {
+            $this->reportsUser[] = $reportsUser;
+            $reportsUser->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportsUser(ReportUser $reportsUser): self
+    {
+        if ($this->reportsUser->removeElement($reportsUser)) {
+            // set the owning side to null (unless already changed)
+            if ($reportsUser->getAuthor() === $this) {
+                $reportsUser->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportUser[]
+     */
+    public function getReportedBy(): Collection
+    {
+        return $this->reportedBy;
+    }
+
+    public function addReportedBy(ReportUser $reportedBy): self
+    {
+        if (!$this->reportedBy->contains($reportedBy)) {
+            $this->reportedBy[] = $reportedBy;
+            $reportedBy->setTarget($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportedBy(ReportUser $reportedBy): self
+    {
+        if ($this->reportedBy->removeElement($reportedBy)) {
+            // set the owning side to null (unless already changed)
+            if ($reportedBy->getTarget() === $this) {
+                $reportedBy->setTarget(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function getCoverPicture(): ?string
+    {
+        return $this->coverPicture;
+    }
+
+    public function setCoverPicture(?string $coverPicture): self
+    {
+        $this->coverPicture = $coverPicture;
+
+        return $this;
     }
 }

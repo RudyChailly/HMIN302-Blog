@@ -8,7 +8,9 @@ use App\Entity\Repository\CategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArticleType extends AbstractType
@@ -28,7 +30,11 @@ class ArticleType extends AbstractType
                 'choice_label' => function($category) {
                     return $category->getName();
                 }
-
+            ])
+            ->add('thumbnail', FileType::class, [
+                'mapped' => false,
+                'attr' => ['placeholder' => "Aucun fichier sélectionné"],
+                'required' => false
             ])
         ;
     }

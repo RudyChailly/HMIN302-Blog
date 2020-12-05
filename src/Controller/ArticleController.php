@@ -8,9 +8,11 @@ use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/article")
@@ -34,7 +36,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, SluggerInterface $slugger): Response
     {
         //TODO WYSIWYG
         $article = new Article();
@@ -44,6 +46,21 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setPublished(new \DateTime('NOW'));
             $article->setAuthor($this->getUser());
+            $thumbnail = $form->get('thumbnail')->getData();
+            if ($thumbnail) {
+                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
+                try {
+                    $thumbnail->move(
+                        $this->getParameter('article_images_directory'),
+                        $newFilename
+                    );
+                    $article->setThumbnail($newFilename);
+                } catch (FileException $e) {}
+
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
@@ -62,6 +79,7 @@ class ArticleController extends AbstractController
      */
     public function show(Article $article, Request $request): Response
     {
+        //TODO Renanme form -> commentForm
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -83,15 +101,35 @@ class ArticleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Article $article): Response
+    public function edit(Request $request, Article $article, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
+        if (file_exists($article->getThumbnail())) {
+            $article->setThumbnail(new File($article->getThumbnail()));
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $thumbnail = $form->get('thumbnail')->getData();
+            if ($thumbnail) {
+                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
+                try {
+                    $thumbnail->move(
+                        $this->getParameter('article_images_directory'),
+                        $newFilename
+                    );
+                    $article->setThumbnail($newFilename);
+                } catch (FileException $e) {}
 
-            return $this->redirectToRoute('article_index');
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+            return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
         }
 
         return $this->render('article/edit.html.twig', [

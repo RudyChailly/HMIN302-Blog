@@ -1,5 +1,6 @@
 <div class="border">
     <h1> <a href="{{ path('article_show', {'urlAlias': article.urlAlias}) }}"> {{ article.title }} </a> </h1>
+    <img src="{{ asset('uploads/article/' ~ article.thumbnail ) }}" alt="..."/>
     <div> {{ article.content }} </div>
     <div> {{ article.published|date("d/m/Y") }} à {{ article.published|date("H:i") }}</div>
     <div> {{ article.category.name }} </div>

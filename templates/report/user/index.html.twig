@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReportUser index{% endblock %}
+
+{% block body %}
+    <h1>ReportUser index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Author</th>
+                <th>Target</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for report_user in report_users %}
+            <tr>
+                <td>{{ report_user.id }}</td>
+                <td>{{ report_user.author.username }}</td>
+                <td>{{ report_user.target.username }}</td>
+                <td>{{ report_user.category }}</td>
+                <td>{{ report_user.description }}</td>
+                <td>{{ report_user.created ? report_user.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('report_user_show', {'id': report_user.id}) }}">show</a>
+                    <a href="{{ path('report_user_edit', {'id': report_user.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('report_user_new') }}">Create new</a>
+{% endblock %}

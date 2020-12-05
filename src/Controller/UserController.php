@@ -3,16 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\ReportUser;
 use App\Entity\User;
 use App\Form\CommentType;
-use App\Form\UserFollowType;
-use App\Form\UserType;
+use App\Form\ReportUserType;
+use App\Form\User\RegistrationType;
+use App\Form\User\UserFollowType;
+use App\Form\User\UserEditType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/user")
@@ -35,7 +40,7 @@ class UserController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -62,6 +67,19 @@ class UserController extends AbstractController
     public function show(User $user, Request $request): Response
     {
         if ($this->getUser()) {
+            $reportUser = new ReportUser();
+            $reportForm = $this->createForm(ReportUserType::class, $reportUser);
+            $reportForm->handleRequest($request);
+            if ($reportForm->isSubmitted() && $reportForm->isValid()) {
+                $reportUser->setAuthor($this->getUser());
+                $reportUser->setTarget($user);
+                $reportUser->setCreated(new \DateTime('NOW'));
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($reportUser);
+                $entityManager->flush();
+                return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
+            }
+
             $followForm = $this->createForm(UserFollowType::class, $this->getUser());
             $followForm->handleRequest($request);
             if ($followForm->isSubmitted() && $followForm->isValid()) {
@@ -77,8 +95,10 @@ class UserController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
             }
+
             return $this->render('user/show.html.twig', [
                 'user' => $user,
+                'reportForm' => $reportForm->createView(),
                 'followForm' => $followForm->createView()
             ]);
         }
@@ -90,15 +110,43 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, User $user, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
+        if (file_exists($user->getProfilePicture())) {
+            $user->setProfilePicture(new File($user->getProfilePicture()));
+        }
+        if (file_exists($user->getCoverPicture())) {
+            $user->setCoverPicture(new File($user->getCoverPicture()));
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            $profilePicture = $form->get('profile_picture')->getData();
+            if ($profilePicture) {
+                $profilePictureName = $slugger->slug($user->getUsername())."-profile.".$profilePicture->guessExtension();
+                try {
+                    $profilePicture->move($this->getParameter('user_images_directory'), $profilePictureName);
+                    $user->setProfilePicture($profilePictureName);
+                } catch (FileException $e) {}
+            }
+
+            $coverPicture = $form->get('cover_picture')->getData();
+            if ($coverPicture) {
+                $coverPictureName = $slugger->slug($user->getUsername())."-cover.".$coverPicture->guessExtension();
+                try {
+                    $coverPicture->move($this->getParameter('user_images_directory'), $coverPictureName);
+                    $user->setCoverPicture($coverPictureName);
+                } catch (FileException $e) {}
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
         }
 
         return $this->render('user/edit.html.twig', [
