@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -54,10 +55,22 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="followers")
+     */
+    private $follows;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="follows")
+     */
+    private $followers;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->follows = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,5 +216,66 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getFollows(): Collection
+    {
+        return $this->follows;
+    }
+
+    public function addFollow(self $follow): self
+    {
+        if (!$this->follows->contains($follow) && $this->getId() != $follow->getId()) {
+            $this->follows[] = $follow;
+            $follow->addFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollow(self $follow): self
+    {
+        $this->follows->removeElement($follow);
+        $follow->removeFollower($this);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(self $follower): self
+    {
+        if (!$this->followers->contains($follower) && $this->getId() != $follower->getId()) {
+            $this->followers[] = $follower;
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(self $follower): self
+    {
+        $this->followers->removeElement($follower);
+        return $this;
+    }
+
+    public function isFollowing(self $user) {
+        return $this->follows->contains($user);
+    }
+
+    public function isAdmin() {
+        return (in_array("ROLE_SUPER_ADMIN", $this->getRoles()) || in_array("ROLE_ADMIN", $this->getRoles()));
+    }
+
+    public function hasAccess(self $utilisateur) {
+        return ($this->isAdmin() || ($this->getId() == $utilisateur->getId()));
     }
 }

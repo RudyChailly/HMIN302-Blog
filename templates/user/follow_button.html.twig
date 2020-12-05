@@ -1,0 +1,12 @@
+{% if (followForm is defined) and (app.user is not null) and (user.id != app.user.id) %}
+    {{ form_start(followForm) }}
+    {% if user in app.user.follows %}
+        {{ form_widget(followForm.follows, { 'label': 'Unfollow' }) }}
+    {% else %}
+        {{ form_widget(followForm.follows, { 'label': 'Follow' }) }}
+    {% endif %}
+    {{ form_end(followForm) }}
+{% endif %}
+
+
+

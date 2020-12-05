@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\User;
+use App\Form\CommentType;
+use App\Form\UserFollowType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,12 +57,33 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{username}", name="user_show", methods={"GET"})
+     * @Route("/{username}", name="user_show", methods={"GET", "POST"})
      */
-    public function show(User $user): Response
+    public function show(User $user, Request $request): Response
     {
+        if ($this->getUser()) {
+            $followForm = $this->createForm(UserFollowType::class, $this->getUser());
+            $followForm->handleRequest($request);
+            if ($followForm->isSubmitted() && $followForm->isValid()) {
+                if (!$this->getUser()->isFollowing($user)) {
+                    $this->getUser()->addFollow($user);
+                }
+                else {
+                    $this->getUser()->removeFollow($user);
+                }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($this->getUser());
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
+            }
+            return $this->render('user/show.html.twig', [
+                'user' => $user,
+                'followForm' => $followForm->createView()
+            ]);
+        }
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'user' => $user
         ]);
     }
 
