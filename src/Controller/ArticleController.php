@@ -39,6 +39,7 @@ class ArticleController extends AbstractController
     public function new(Request $request, SluggerInterface $slugger): Response
     {
         //TODO WYSIWYG
+        // TODO Nom images
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
