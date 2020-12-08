@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Report;
 
 use App\Entity\ReportArticle;
-use App\Form\ReportArticleType;
 use App\Repository\ReportArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

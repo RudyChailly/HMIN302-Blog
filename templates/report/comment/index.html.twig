@@ -10,6 +10,9 @@
             <tr>
                 <th>Id</th>
                 <th>Category</th>
+                <th>Comment</th>
+                <th>Article title</th>
+                <th>Reporter</th>
                 <th>Description</th>
                 <th>Created</th>
                 <th>actions</th>
@@ -20,6 +23,9 @@
             <tr>
                 <td>{{ report_comment.id }}</td>
                 <td>{{ report_comment.category }}</td>
+                <td>{{ report_comment.target.content }}</td>
+                <td>{{ report_comment.target.article.title }}</td>
+                <td>{{ report_comment.author.username }}</td>
                 <td>{{ report_comment.description }}</td>
                 <td>{{ report_comment.created ? report_comment.created|date('Y-m-d H:i:s') : '' }}</td>
                 <td>

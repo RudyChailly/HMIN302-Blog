@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ReportUser;
 use App\Entity\User;
-use App\Form\ReportUserType;
+use App\Form\Report\ReportUserType;
 use App\Form\User\RegistrationType;
 use App\Form\User\UserEditType;
 use App\Form\User\UserFollowType;

@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\ReportArticle;
+use App\Entity\ReportComment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
-use App\Form\ReportArticleType;
+use App\Form\Report\ReportArticleType;
+use App\Form\Report\ReportCommentType;
+use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,7 +82,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/{urlAlias}", name="article_show", methods={"GET", "POST"})
      */
-    public function show(Article $article, Request $request): Response
+    public function show(Article $article, Request $request, CommentRepository $commentRepository): Response
     {
         if ($this->getUser()) {
             $reportArticle = new ReportArticle();
@@ -107,10 +110,24 @@ class ArticleController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
+            //TODO mettre le formulaire dans un modal
+            $reportComment = new ReportComment();
+            $reportCommentForm = $this->createForm(ReportCommentType::class, $reportComment);
+            $reportCommentForm->handleRequest($request);
+            if ($reportCommentForm->isSubmitted() && $reportCommentForm->isValid()) {
+                $reportComment->setAuthor($this->getUser());
+                $reportComment->setTarget($commentRepository->find($reportComment->getTarget()));
+                $reportComment->setCreated(new \DateTime('NOW'));
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($reportComment);
+                $entityManager->flush();
+                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
+            }
             return $this->render('article/show.html.twig', [
                 'article' => $article,
                 'formNewComment' => $formNewComment->createView(),
-                'reportForm' => $reportForm->createView()
+                'reportForm' => $reportForm->createView(),
+                'reportCommentForm' => $reportCommentForm->createView()
             ]);
         }
         return $this->render('article/show.html.twig', [
@@ -171,4 +188,5 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute('article_index');
     }
+
 }

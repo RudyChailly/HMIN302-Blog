@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Report;
 
-use App\Entity\ReportUser;
+use App\Entity\ReportArticle;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReportUserType extends ReportType
+class ReportArticleType extends ReportType
 {
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ReportUser::class,
+            'data_class' => ReportArticle::class,
         ]);
     }
 }

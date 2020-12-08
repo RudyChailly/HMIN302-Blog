@@ -1,0 +1,7 @@
+
+{% if (reportCommentForm is defined) and (app.user is not null)%}
+    {{ form_start(reportCommentForm) }}
+    {{ form_widget(reportCommentForm) }}
+    <button type="submit" class="btn btn-light">{{ button_label|default('Report') }}</button>
+{{ form_end(reportCommentForm) }}
+{% endif %}

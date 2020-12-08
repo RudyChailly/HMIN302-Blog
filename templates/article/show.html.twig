@@ -6,7 +6,7 @@
     <h1>Article</h1>
     <div>
         <h3>Report Article</h3>
-        {{ include('report/_form.html.twig') }}
+        {{ include('Report/_form.html.twig') }}
     </div>
 
     <div>
@@ -25,6 +25,8 @@
             {{ include('comment/show.html.twig', {'comment': comment}) }}
         {% endfor %}
     </div>
+
+    {{ include('Report/comment/_form.html.twig') }}
 
 
 {% endblock %}

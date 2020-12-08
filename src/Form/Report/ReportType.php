@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Form;
+namespace App\Form\Report;
 
 
 use App\Enum\ReportCategory;
@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class ReportType extends AbstractType
 {
+    //TODO déplacer dans un dossier Report/ avec les sous types
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

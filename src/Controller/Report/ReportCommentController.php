@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Report;
 
 use App\Entity\ReportComment;
-use App\Form\ReportCommentType;
 use App\Repository\ReportCommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,7 @@ class ReportCommentController extends AbstractController
      */
     public function index(ReportCommentRepository $reportCommentRepository): Response
     {
-        return $this->render('comment/index.html.twig', [
+        return $this->render('report/comment/index.html.twig', [
             'report_comments' => $reportCommentRepository->findAll(),
         ]);
     }

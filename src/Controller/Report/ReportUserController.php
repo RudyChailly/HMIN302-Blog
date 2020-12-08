@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Report;
 
 use App\Entity\ReportUser;
-use App\Form\ReportUserType;
 use App\Repository\ReportUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +29,8 @@ class ReportUserController extends AbstractController
      */
     public function show(ReportUser $reportUser): Response
     {
-        return $this->render('report/user/show.html.twig', [
-            'report' => $reportUser,
+        return $this->render('Report/user/show.html.twig', [
+            'Report' => $reportUser,
         ]);
     }
 
