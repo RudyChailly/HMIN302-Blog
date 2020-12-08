@@ -20,31 +20,8 @@ class ReportArticleController extends AbstractController
      */
     public function index(ReportArticleRepository $reportArticleRepository): Response
     {
-        return $this->render('report_article/index.html.twig', [
+        return $this->render('report/article/index.html.twig', [
             'report_articles' => $reportArticleRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="report_article_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $reportArticle = new ReportArticle();
-        $form = $this->createForm(ReportArticleType::class, $reportArticle);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reportArticle);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('report_article_index');
-        }
-
-        return $this->render('report_article/new.html.twig', [
-            'report_article' => $reportArticle,
-            'form' => $form->createView(),
         ]);
     }
 
@@ -53,28 +30,8 @@ class ReportArticleController extends AbstractController
      */
     public function show(ReportArticle $reportArticle): Response
     {
-        return $this->render('report_article/show.html.twig', [
-            'report_article' => $reportArticle,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="report_article_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, ReportArticle $reportArticle): Response
-    {
-        $form = $this->createForm(ReportArticleType::class, $reportArticle);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('report_article_index');
-        }
-
-        return $this->render('report_article/edit.html.twig', [
-            'report_article' => $reportArticle,
-            'form' => $form->createView(),
+        return $this->render('article/show.html.twig', [
+            'article' => $reportArticle,
         ]);
     }
 

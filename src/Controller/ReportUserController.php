@@ -26,56 +26,12 @@ class ReportUserController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="report_user_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $reportUser = new ReportUser();
-        $form = $this->createForm(ReportUserType::class, $reportUser);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            var_dump($reportUser);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reportUser);
-            //$entityManager->flush();
-
-            //return $this->redirectToRoute('report_user_index');
-        }
-
-        return $this->render('report/user/new.html.twig', [
-            'report' => $reportUser,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="report_user_show", methods={"GET"})
      */
     public function show(ReportUser $reportUser): Response
     {
         return $this->render('report/user/show.html.twig', [
             'report' => $reportUser,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="report_user_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, ReportUser $reportUser): Response
-    {
-        $form = $this->createForm(ReportUserType::class, $reportUser);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('report_user_index');
-        }
-
-        return $this->render('report/user/edit.html.twig', [
-            'report' => $reportUser,
-            'form' => $form->createView(),
         ]);
     }
 

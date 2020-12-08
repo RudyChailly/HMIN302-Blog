@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\ReportUser;
 use App\Entity\User;
-use App\Form\CommentType;
 use App\Form\ReportUserType;
 use App\Form\User\RegistrationType;
-use App\Form\User\UserFollowType;
 use App\Form\User\UserEditType;
+use App\Form\User\UserFollowType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;

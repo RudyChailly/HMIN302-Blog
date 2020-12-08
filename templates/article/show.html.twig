@@ -5,6 +5,11 @@
 {% block body %}
     <h1>Article</h1>
     <div>
+        <h3>Report Article</h3>
+        {{ include('report/_form.html.twig') }}
+    </div>
+
+    <div>
         <a href="{{ path('user_show', {'username': article.author.username}) }}">{{ article.author.username }}</a>
         <div>{{ article.published|date("d/m/Y") }} à {{ article.published|date("H:i") }}</div>
     </div>
