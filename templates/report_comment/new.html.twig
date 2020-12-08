@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ReportComment{% endblock %}
+
+{% block body %}
+    <h1>Create new ReportComment</h1>
+
+    {{ include('report_comment/_form.html.twig') }}
+
+    <a href="{{ path('report_comment_index') }}">back to list</a>
+{% endblock %}

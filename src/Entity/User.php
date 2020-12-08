@@ -85,6 +85,16 @@ class User implements UserInterface
      */
     private $coverPicture;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="author")
+     */
+    private $reportsArticle;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="author")
+     */
+    private $reportsComment;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -93,6 +103,8 @@ class User implements UserInterface
         $this->followers = new ArrayCollection();
         $this->reportsUser = new ArrayCollection();
         $this->reportedBy = new ArrayCollection();
+        $this->reportsArticle = new ArrayCollection();
+        $this->reportsComment = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -381,6 +393,66 @@ class User implements UserInterface
     public function setCoverPicture(?string $coverPicture): self
     {
         $this->coverPicture = $coverPicture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportArticle[]
+     */
+    public function getReportsArticle(): Collection
+    {
+        return $this->reportsArticle;
+    }
+
+    public function addReportsArticle(ReportArticle $reportsArticle): self
+    {
+        if (!$this->reportsArticle->contains($reportsArticle)) {
+            $this->reportsArticle[] = $reportsArticle;
+            $reportsArticle->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportsArticle(ReportArticle $reportsArticle): self
+    {
+        if ($this->reportsArticle->removeElement($reportsArticle)) {
+            // set the owning side to null (unless already changed)
+            if ($reportsArticle->getAuthor() === $this) {
+                $reportsArticle->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportComment[]
+     */
+    public function getReportsComment(): Collection
+    {
+        return $this->reportsComment;
+    }
+
+    public function addReportsComment(ReportComment $reportsComment): self
+    {
+        if (!$this->reportsComment->contains($reportsComment)) {
+            $this->reportsComment[] = $reportsComment;
+            $reportsComment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportsComment(ReportComment $reportsComment): self
+    {
+        if ($this->reportsComment->removeElement($reportsComment)) {
+            // set the owning side to null (unless already changed)
+            if ($reportsComment->getAuthor() === $this) {
+                $reportsComment->setAuthor(null);
+            }
+        }
 
         return $this;
     }

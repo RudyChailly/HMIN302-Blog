@@ -64,9 +64,15 @@ class Article
      */
     private $thumbnail;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="target")
+     */
+    private $reportedBy;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->reportedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,6 +190,36 @@ class Article
     public function setThumbnail(?string $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportArticle[]
+     */
+    public function getReportedBy(): Collection
+    {
+        return $this->reportedBy;
+    }
+
+    public function addReportedBy(ReportArticle $reportedBy): self
+    {
+        if (!$this->reportedBy->contains($reportedBy)) {
+            $this->reportedBy[] = $reportedBy;
+            $reportedBy->setTarget($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportedBy(ReportArticle $reportedBy): self
+    {
+        if ($this->reportedBy->removeElement($reportedBy)) {
+            // set the owning side to null (unless already changed)
+            if ($reportedBy->getTarget() === $this) {
+                $reportedBy->setTarget(null);
+            }
+        }
 
         return $this;
     }

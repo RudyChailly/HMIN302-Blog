@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +40,16 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $article;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="target")
+     */
+    private $reportedBy;
+
+    public function __construct()
+    {
+        $this->reportedBy = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -88,6 +100,36 @@ class Comment
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportComment[]
+     */
+    public function getReportedBy(): Collection
+    {
+        return $this->reportedBy;
+    }
+
+    public function addReportedBy(ReportComment $reportedBy): self
+    {
+        if (!$this->reportedBy->contains($reportedBy)) {
+            $this->reportedBy[] = $reportedBy;
+            $reportedBy->setTarget($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReportedBy(ReportComment $reportedBy): self
+    {
+        if ($this->reportedBy->removeElement($reportedBy)) {
+            // set the owning side to null (unless already changed)
+            if ($reportedBy->getTarget() === $this) {
+                $reportedBy->setTarget(null);
+            }
+        }
 
         return $this;
     }
