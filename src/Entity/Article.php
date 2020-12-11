@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(
+ *     normalizationContext={"groups"={"get"}},
+ *     itemOperations={"get"}
+ * )
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
@@ -17,40 +23,45 @@ class Article
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     *
      * @Gedmo\Slug(fields={"title"})
      */
     private $urlAlias;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"get"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"get"})
      */
     private $published;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get"})
      */
     private $category;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get"})
      */
     private $author;
 

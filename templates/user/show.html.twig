@@ -7,7 +7,7 @@
     <img src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
     <img src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
     {{ include('user/follow_button.html.twig') }}
-    {{ include('Report/_form.html.twig') }}
+    {{ include('report/_form.html.twig') }}
     <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
     {% for article in user.articles %}
         {{ include('article/preview.html.twig', {'article': article}) }}
