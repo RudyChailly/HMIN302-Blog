@@ -38,24 +38,21 @@ class UserController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationType::class, $user);
-        $form->handleRequest($request);
+        $formSignUp = $this->createForm(RegistrationType::class, $user);
+        $formSignUp->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formSignUp->isSubmitted() && $formSignUp->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $hash = $encoder->encodePassword($user,$user->getPassword());
             $user->setPassword($hash);
             $entityManager->persist($user);
             $entityManager->flush();
-
-
-
             return $this->redirectToRoute('app_login');
         }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
-            'form' => $form->createView(),
+            'formSignUp' => $formSignUp->createView(),
         ]);
     }
 

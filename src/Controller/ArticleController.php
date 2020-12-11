@@ -6,10 +6,12 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\ReportArticle;
 use App\Entity\ReportComment;
+use App\Entity\User;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Form\Report\ReportArticleType;
 use App\Form\Report\ReportCommentType;
+use App\Form\User\RegistrationType;
 use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
@@ -26,15 +28,22 @@ class ArticleController extends AbstractController
     /**
      * @Route("/", name="article_index", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $articleRepository = $this->getDoctrine()->getRepository(Article::class);
         $articles = $articleRepository->findAll();
 
-        return $this->render('article/index.html.twig', [
+        $viewParameters = [
             'controller_name' => 'ArticleController',
             'articles' => $articles
-        ]);
+        ];
+        if (!$this->getUser()) {
+            $user = new User();
+            $formSignUp = $this->createForm(RegistrationType::class, $user);
+            $formSignUp->handleRequest($request);
+            $viewParameters['formSignUp'] = $formSignUp->createView();
+        }
+        return $this->render('article/index.html.twig', $viewParameters);
     }
 
     /**

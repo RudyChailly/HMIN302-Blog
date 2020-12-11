@@ -1,2 +1,8 @@
+$primary: #ffffff;
+$secondary: #007bff;
+$dark: #0d1117;
+$dark-lighter: #1e2631;
 
+@import "scss/template";
+@import "scss/buttons";
 @import "~bootstrap/scss/bootstrap";

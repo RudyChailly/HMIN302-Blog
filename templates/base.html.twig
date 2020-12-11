@@ -2,35 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
     </head>
     <body>
-        <header>
-            {%  if (app.user) %}
-                <div>
-                    <a href="/logout"> Déconnexion </a>
-                </div>
-            {% else  %}
-                <div>
-                    <a href="/user/new"> Inscription </a>
-                    <a href="/login"> Connexion </a>
-                </div>
-            {% endif %}
-            <div>
-                <a href="/article"> Articles </a>/
-                <a href="/user"> User </a>/
-                <a href="/comment"> Comment </a>/
-                <a href="/report/user"> Report user </a>/
-                <a href="/report/article"> Report article </a>/
-                <a href="/report/comment"> Report comment </a>/
-                <a href="/other"> Site partenaire </a>
-            </div>
-        </header>
+        <header> {{ include('_base/menu.html.twig') }}</header>
         <main>
-            {% block body %}{% endblock %}
+            <div class="container mt-3">
+                    <h1> {% block pageTitle%} {% endblock %} </h1>
+                {% block body %}{% endblock %}
+            </div>
         </main>
 
         {% block javascripts %}

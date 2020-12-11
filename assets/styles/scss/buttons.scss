@@ -1,0 +1,30 @@
+.btn-pill {
+  @extend .btn;
+  @extend .rounded-pill;
+  font-weight: bold !important;
+  border-width: 2px !important;
+}
+
+.btn-grey {
+  color: #fff !important;
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+
+  &:hover {
+    color: #fff !important;
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+  }
+}
+
+.btn-secondary {
+  color: #fff !important;
+  background-color: $secondary !important;
+  border-color: $secondary !important;
+
+  &:hover {
+    color: #fff !important;
+    background-color: #0069d9 !important;
+    border-color: #0069d9 !important;
+  }
+}

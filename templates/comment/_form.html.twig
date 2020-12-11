@@ -1,4 +1,6 @@
+{% if app.user and formNewComment is defined %}
 {{ form_start(formNewComment) }}
     {{ form_widget(formNewComment) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(formNewComment) }}
+{% endif %}
