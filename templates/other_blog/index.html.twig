@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} s/o Loïc {% endblock %}
+
+{% block body %}
+    {% for article in articles %}
+        <div>
+            {{ article.title }}
+        </div>
+    {% endfor %}
+{% endblock %}
