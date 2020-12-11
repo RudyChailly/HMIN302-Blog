@@ -37,23 +37,26 @@ class UserController extends AbstractController
      */
     public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
-        $user = new User();
-        $formSignUp = $this->createForm(RegistrationType::class, $user);
-        $formSignUp->handleRequest($request);
+        if (!$this->getUser()) {
+            $user = new User();
+            $formUser = $this->createForm(RegistrationType::class, $user);
+            $formUser->handleRequest($request);
 
-        if ($formSignUp->isSubmitted() && $formSignUp->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $hash = $encoder->encodePassword($user,$user->getPassword());
-            $user->setPassword($hash);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_login');
+            if ($formUser->isSubmitted() && $formUser->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $hash = $encoder->encodePassword($user,$user->getPassword());
+                $user->setPassword($hash);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_login');
+            }
+
+            return $this->render('user/new.html.twig', [
+                'user' => $user,
+                'formUser' => $formUser->createView(),
+            ]);
         }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'formSignUp' => $formSignUp->createView(),
-        ]);
+        return $this->redirectToRoute('article_index');
     }
 
     /**
@@ -107,8 +110,8 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(UserEditType::class, $user);
-        $form->handleRequest($request);
+        $formUser = $this->createForm(UserEditType::class, $user);
+        $formUser->handleRequest($request);
         if (file_exists($user->getProfilePicture())) {
             $user->setProfilePicture(new File($user->getProfilePicture()));
         }
@@ -116,10 +119,10 @@ class UserController extends AbstractController
             $user->setCoverPicture(new File($user->getCoverPicture()));
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $profilePicture = $form->get('profile_picture')->getData();
+            $profilePicture = $formUser->get('profile_picture')->getData();
             if ($profilePicture) {
                 $profilePictureName = $slugger->slug($user->getUsername())."-profile.".$profilePicture->guessExtension();
                 try {
@@ -128,7 +131,7 @@ class UserController extends AbstractController
                 } catch (FileException $e) {}
             }
 
-            $coverPicture = $form->get('cover_picture')->getData();
+            $coverPicture = $formUser->get('cover_picture')->getData();
             if ($coverPicture) {
                 $coverPictureName = $slugger->slug($user->getUsername())."-cover.".$coverPicture->guessExtension();
                 try {
@@ -146,7 +149,7 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'form' => $form->createView(),
+            'formUser' => $formUser->createView(),
         ]);
     }
 

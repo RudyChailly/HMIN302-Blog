@@ -3,13 +3,39 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1>{{ user.username }}</h1>
-    <img src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
-    <img src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
-    {{ include('user/follow_button.html.twig') }}
-    {{ include('report/_form.html.twig') }}
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+    <img class="user-show-cover-picture" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
+    <div class="d-flex flex-row bg-white border-left border-right border-bottom user-show-header">
+        <img class="user-show-profile-picture" src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
+        <div class="d-flex flex-row w-100 justify-content-between">
+            <div class="user-show-infos">
+                <div class="user-show-username">{{ user.username }}</div>
+                <div class="d-flex flex-row">
+                    <div class="mr-3"> <span class="font-weight-bold"> {{ user.follows|length }} </span>
+                        abonnement{% if user.follows|length > 1 %}s{% endif %}
+                    </div>
+                    <div> <span class="font-weight-bold"> {{ user.followers|length }} </span>
+                        abonné{% if user.follows|length > 1 %}s{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 mr-3">
+                {% if app.user.id == user.id %}
+                    <a class="btn-pill btn-outline-primary" href="{{ path('user_edit', {'id': user.id}) }}">
+                        Editer le profil
+                    </a>
+                {% else %}
+                    {{ include('user/follow_button.html.twig') }}
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+
+
     {% for article in user.articles %}
         {{ include('article/preview.html.twig', {'article': article}) }}
     {% endfor %}
+
+    {{ include('report/_form.html.twig') }}
 {% endblock %}

@@ -1,0 +1,54 @@
+.user-show-cover-picture {
+  width: 100% !important;
+  height: 300px;
+  object-fit: cover;
+  border: $primary 1px solid !important;
+}
+
+.user-show-profile-picture {
+  width: 200px !important;
+  height: 200px;
+  object-fit: cover;
+  border: $primary 4px solid !important;
+  border-radius: 50% !important;
+  top: -100px;
+  left: 12px;
+  position: relative;
+}
+
+.user-show-infos {
+  margin-left: 25px !important;
+  margin-top: 10px;
+}
+
+.user-show-header {
+  height: 120px !important;
+}
+
+.user-show-username {
+  color: $secondary;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.user-show-button-follow {
+  width: 150px;
+}
+
+.user-show-button-unfollow {
+  &:after {
+    content: 'Abonné';
+  }
+
+  &:hover {
+    background-color: $danger !important;
+    border-color: $danger !important;
+    content: '';
+    &:after {
+      content:'';
+    }
+    &:before {
+      content: 'Se désabonner';
+    }
+  }
+}
