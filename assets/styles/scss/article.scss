@@ -1,0 +1,24 @@
+.article-preview {
+  text-decoration: none;
+  color: $black !important;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    background-color: $light-grey !important;
+    color: $black !important;
+  }
+
+  .icon {
+    width: 16px !important;
+  }
+}
+
+.article-preview-thumbnail {
+  height: 150px;
+  object-fit: cover;
+}
+
+.article-preview-category {
+  font-size: 0.9rem;
+}

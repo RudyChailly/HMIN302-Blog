@@ -3,6 +3,7 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
+    <div class="container my-3">
     <img class="user-show-cover-picture" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
     <div class="d-flex flex-row bg-white border-left border-right border-bottom user-show-header">
         <img class="user-show-profile-picture" src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
@@ -31,11 +32,18 @@
 
 
     </div>
-
-
-    {% for article in user.articles %}
-        {{ include('article/preview.html.twig', {'article': article}) }}
-    {% endfor %}
-
-    {{ include('report/_form.html.twig') }}
+        {% if user.articles|length > 0 %}
+        <div class="bg-white border border-top-0">
+            <h3 class="pt-3 ml-3 font-weight-bold"> Articles rédigés </h3>
+            <div class="card-group">
+                {% for article in user.articles %}
+                    {{ include('article/preview.html.twig', {'article': article}) }}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if app.user and app.user.id != user.id %}
+            {{ include('report/_form.html.twig') }}
+        {% endif %}
+    </div>
 {% endblock %}

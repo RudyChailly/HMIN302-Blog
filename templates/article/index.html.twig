@@ -3,10 +3,32 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-    {% if (app.user) %}
-    <a href="{{ path('article_new') }}">Create new</a>
-    {% endif %}
-    {% for article in articles %}
-        {{ include('article/preview.html.twig', {'article': article}) }}
-    {% endfor %}
+
+    <div class="container mt-3">
+        <div class="d-flex justify-content-between mb-3">
+            <h1 class="mb-0"> Articles </h1>
+        {% if (app.user) %}
+            <a class="btn-pill btn-outline-primary my-auto" href="{{ path('article_new') }}">
+                Nouvel article
+            </a>
+        {% endif %}
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active border-left-0" href="#">Tous les articles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Articles suivis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Articles partenaires</a>
+            </li>
+        </ul>
+        <div class="bg-white card-group">
+        {% for article in articles %}
+            {{ include('article/preview.html.twig', {'article': article}) }}
+        {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

@@ -10,9 +10,7 @@
     <body>
         <header> {{ include('_base/menu.html.twig') }}</header>
         <main>
-            <div class="container mt-3">
                 {% block body %}{% endblock %}
-            </div>
         </main>
 
         {% block javascripts %}
