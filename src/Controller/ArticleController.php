@@ -12,6 +12,7 @@ use App\Form\CommentType;
 use App\Form\Report\ReportArticleType;
 use App\Form\Report\ReportCommentType;
 use App\Form\User\RegistrationType;
+use App\Form\User\UserFollowType;
 use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
@@ -94,6 +95,23 @@ class ArticleController extends AbstractController
     public function show(Article $article, Request $request, CommentRepository $commentRepository): Response
     {
         if ($this->getUser()) {
+            $user = $article->getAuthor();
+            $followForm = $this->createForm(UserFollowType::class, $this->getUser());
+            $followForm->handleRequest($request);
+            if ($followForm->isSubmitted() && $followForm->isValid()) {
+                if (!$this->getUser()->isFollowing($user)) {
+                    $this->getUser()->addFollow($user);
+                }
+                else {
+                    $this->getUser()->removeFollow($user);
+                }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($this->getUser());
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
+            }
+
             $reportArticle = new ReportArticle();
             $reportForm = $this->createForm(ReportArticleType::class, $reportArticle);
             $reportForm->handleRequest($request);
@@ -134,6 +152,7 @@ class ArticleController extends AbstractController
             }
             return $this->render('article/show.html.twig', [
                 'article' => $article,
+                'followForm' => $followForm->createView(),
                 'formNewComment' => $formNewComment->createView(),
                 'reportForm' => $reportForm->createView(),
                 'reportCommentForm' => $reportCommentForm->createView()

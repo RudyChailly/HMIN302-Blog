@@ -4,43 +4,43 @@
 
 {% block body %}
     <div class="container my-3">
-    <img class="user-show-cover-picture" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
-    <div class="d-flex flex-row bg-white border-left border-right border-bottom user-show-header">
-        <img class="user-show-profile-picture" src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
-        <div class="d-flex flex-row w-100 justify-content-between">
-            <div class="user-show-infos">
-                <div class="user-show-username">{{ user.username }}</div>
-                <div class="d-flex flex-row">
-                    <div class="mr-3"> <span class="font-weight-bold"> {{ user.follows|length }} </span>
-                        abonnement{% if user.follows|length > 1 %}s{% endif %}
-                    </div>
-                    <div> <span class="font-weight-bold"> {{ user.followers|length }} </span>
-                        abonné{% if user.follows|length > 1 %}s{% endif %}
+        <img class="user-show-cover-picture" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
+        <div class="d-flex flex-row bg-white border-left border-right border-bottom user-show-header">
+            <img class="user-show-profile-picture" src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
+            <div class="d-flex flex-row w-100 justify-content-between">
+                <div class="user-show-infos">
+                    <div class="user-show-username">{{ user.username }}</div>
+                    <div class="d-flex flex-row">
+                        <div class="mr-3"><span class="font-weight-bold"> {{ user.follows|length }} </span>
+                            abonnement{% if user.follows|length > 1 %}s{% endif %}
+                        </div>
+                        <div><span class="font-weight-bold"> {{ user.followers|length }} </span>
+                            abonné{% if user.follows|length > 1 %}s{% endif %}
+                        </div>
                     </div>
                 </div>
+                <div class="mt-3 mr-3">
+                    {% if app.user.id == user.id %}
+                        <a class="btn-pill btn-outline-primary" href="{{ path('user_edit', {'id': user.id}) }}">
+                            Editer le profil
+                        </a>
+                    {% else %}
+                        {{ include('user/follow_button.html.twig') }}
+                    {% endif %}
+                </div>
             </div>
-            <div class="mt-3 mr-3">
-                {% if app.user.id == user.id %}
-                    <a class="btn-pill btn-outline-primary" href="{{ path('user_edit', {'id': user.id}) }}">
-                        Editer le profil
-                    </a>
-                {% else %}
-                    {{ include('user/follow_button.html.twig') }}
-                {% endif %}
-            </div>
+
+
         </div>
-
-
-    </div>
         {% if user.articles|length > 0 %}
-        <div class="bg-white border border-top-0">
-            <h3 class="pt-3 ml-3 font-weight-bold"> Articles rédigés </h3>
-            <div class="card-group">
-                {% for article in user.articles %}
-                    {{ include('article/preview.html.twig', {'article': article}) }}
-                {% endfor %}
+            <div class="bg-white border border-top-0">
+                <h3 class="pt-3 ml-3 font-weight-bold"> Articles rédigés </h3>
+                <div class="card-group">
+                    {% for article in user.articles %}
+                        {{ include('article/preview.html.twig', {'article': article}) }}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
         {% endif %}
         {% if app.user and app.user.id != user.id %}
             {{ include('report/_form.html.twig') }}

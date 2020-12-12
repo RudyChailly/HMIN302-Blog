@@ -5,6 +5,16 @@
   border: $primary 1px solid !important;
 }
 
+//TODO héritage picture
+
+.user-preview-profile-picture {
+  width: 100px !important;
+  height: 100px;
+  object-fit: cover;
+  border: $primary 3px solid !important;
+  border-radius: 50% !important;
+}
+
 .user-show-profile-picture {
   width: 200px !important;
   height: 200px;
@@ -50,5 +60,12 @@
     &:before {
       content: 'Se désabonner';
     }
+  }
+}
+
+.user-preview {
+  &:hover {
+    background-color: $light-grey;
+    text-decoration: none;
   }
 }

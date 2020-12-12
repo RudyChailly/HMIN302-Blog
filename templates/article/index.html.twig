@@ -13,18 +13,20 @@
             </a>
         {% endif %}
         </div>
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs nav-fill">
             <li class="nav-item">
-                <a class="nav-link active border-left-0" href="#">Tous les articles</a>
+                <a class="nav-link active" href="#">Tous les articles</a>
             </li>
+            {% if app.user %}
             <li class="nav-item">
                 <a class="nav-link" href="#">Articles suivis</a>
             </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="#">Articles partenaires</a>
             </li>
         </ul>
-        <div class="bg-white card-group">
+        <div class="bg-white card-group border border-top-0">
         {% for article in articles %}
             {{ include('article/preview.html.twig', {'article': article}) }}
         {% endfor %}

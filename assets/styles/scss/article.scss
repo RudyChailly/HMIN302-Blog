@@ -22,3 +22,13 @@
 .article-preview-category {
   font-size: 0.9rem;
 }
+
+.article-show-thumbnail {
+  width: 100% !important;
+  height: 400px !important;
+  object-fit: cover;
+}
+
+.article-content {
+  line-height: 1.625rem !important;
+}

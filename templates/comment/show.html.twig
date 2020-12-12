@@ -1,8 +1,29 @@
-<div id="comment-{{ comment.id }}" class="border border-primary">
-    <p> {{ comment.content }} </p>
-    <div> De <a href="{{ path('user_show', {'username': comment.author.username}) }}">{{ comment.author.username }} </a>  le {{ comment.published|date("d/m/Y") }} à {{ comment.published|date("H:i") }}</div>
+<div id="comment-{{ comment.id }}" class="row">
+    <div class="col-1 pr-0">
+        <div class="bg-white d-flex h-100 border border-right-0 border-top-0 py-3 justify-content-center">
+            <a href="{{ path('user_show', {'username': comment.author.username}) }}">
+                <img class="comment-user-profile-picture " src="{{ asset('uploads/user/' ~ comment.author.profilePicture ) }}" alt="..."/>
+            </a>
+        </div>
+    </div>
+    <div class="col-11 pl-0 ">
+        <div class="bg-white h-100 border border-left-0  border-top-0 py-3">
+            <div class="d-flex flex-row my-auto justify-content-between">
+                <a href="{{ path('user_show', {'username': comment.author.username}) }}" class="mr-3"> {{ comment.author.username}} </a>
+                <div class="comment-date my-auto mr-3">
+                    <span> {{ comment.published|date("d/m/Y | H:i") }} </span>
+                </div>
 
+            </div>
+        <div class="pt-2">
+            <p> {{ comment.content }} </p>
+        </div>
+        </div>
+    </div>
+
+    <!--
     <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
     <button class="reportCommentButton" id="commentReportButton-{{ comment.id }}">report</button>
     {{ include('comment/_delete_form.html.twig') }}
+    -->
 </div>
