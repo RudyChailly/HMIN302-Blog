@@ -14,16 +14,28 @@
         {% endif %}
         </div>
         <ul class="nav nav-tabs nav-fill">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Tous les articles</a>
-            </li>
             {% if app.user %}
-            <li class="nav-item">
-                <a class="nav-link" href="#">Articles suivis</a>
-            </li>
+                <li class="nav-item">
+                    {% if 'follows' in app.request.pathinfo %}
+                        <div class="nav-link active">Articles suivis</div>
+                    {% else %}
+                        <a class="nav-link" href="{{ path('article_follows') }}">Articles suivis</a>
+                    {% endif %}
+                </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="#">Articles partenaires</a>
+                {% if 'all' in app.request.pathinfo %}
+                    <div class="nav-link active">Tous les articles</div>
+                {% else %}
+                    <a class="nav-link" href="{{ path('article_all') }}">Tous les articles</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if 'partners' in app.request.pathinfo %}
+                    <div class="nav-link active">Articles partenaires</div>
+                {% else %}
+                    <a class="nav-link" href="{{ path('article_partners_index') }}">Articles partenaires</a>
+                {% endif %}
             </li>
         </ul>
         <div class="bg-white card-group border border-top-0">

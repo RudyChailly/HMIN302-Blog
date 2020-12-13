@@ -19,7 +19,7 @@ class ReportArticleController extends AbstractController
      */
     public function index(ReportArticleRepository $reportArticleRepository): Response
     {
-        return $this->render('report/article/index.html.twig', [
+        return $this->render('report/article/articles.html.twig', [
             'report_articles' => $reportArticleRepository->findAll(),
         ]);
     }

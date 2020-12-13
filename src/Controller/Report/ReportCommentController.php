@@ -19,7 +19,7 @@ class ReportCommentController extends AbstractController
      */
     public function index(ReportCommentRepository $reportCommentRepository): Response
     {
-        return $this->render('report/comment/index.html.twig', [
+        return $this->render('report/comment/articles.html.twig', [
             'report_comments' => $reportCommentRepository->findAll(),
         ]);
     }

@@ -19,7 +19,7 @@ class ReportUserController extends AbstractController
      */
     public function index(ReportUserRepository $reportUserRepository): Response
     {
-        return $this->render('report/user/index.html.twig', [
+        return $this->render('report/user/articles.html.twig', [
             'report_users' => $reportUserRepository->findAll(),
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Article;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,6 +22,16 @@ class ArticleRepository extends ServiceEntityRepository
     public function findAll()
     {
         return $this->findBy([], ['published' => 'DESC']);
+    }
+
+    public function findByFollows(User $user) {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.author IN (:follows)')
+            ->setParameter('follows', $user->getFollows())
+            ->orderBy('a.published', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**

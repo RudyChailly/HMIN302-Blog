@@ -379,7 +379,10 @@ class User implements UserInterface
 
     public function getProfilePicture(): ?string
     {
-        return $this->profilePicture;
+        if ($this->profilePicture != null) {
+            return $this->profilePicture;
+        }
+        return "default-avatar.jpg";
     }
 
     public function setProfilePicture(?string $profilePicture): self

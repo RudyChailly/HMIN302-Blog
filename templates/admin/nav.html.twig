@@ -1,0 +1,23 @@
+<ul class="nav nav-tabs nav-fill">
+    <li class="nav-item">
+        {% if not ('user' in app.request.pathinfo or 'reports' in app.request.pathinfo) %}
+            <div class="nav-link active">Articles</div>
+        {% else %}
+            <a class="nav-link" href="{{ path('article_follows') }}">Articles</a>
+        {% endif %}
+    </li>
+    <li class="nav-item">
+        {% if 'all' in app.request.pathinfo %}
+            <div class="nav-link active">Utilisateurs</div>
+        {% else %}
+            <a class="nav-link" href="{{ path('article_all') }}">Utilisateurs</a>
+        {% endif %}
+    </li>
+    <li class="nav-item">
+        {% if 'partners' in app.request.pathinfo %}
+            <div class="nav-link active">Signalements</div>
+        {% else %}
+            <a class="nav-link" href="{{ path('article_partners_index') }}">Signalements</a>
+        {% endif %}
+    </li>
+</ul>

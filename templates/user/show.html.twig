@@ -4,7 +4,11 @@
 
 {% block body %}
     <div class="container my-3">
-        <img class="user-show-cover-picture" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
+        {% if user.coverPicture is not null %}
+            <img class="user-show-cover-picture border" src="{{ asset('uploads/user/' ~ user.coverPicture ) }}" alt="..."/>
+        {% else %}
+            <div class="user-show-default-cover-picture border"></div>
+        {% endif %}
         <div class="d-flex flex-row bg-white border-left border-right border-bottom user-show-header">
             <img class="user-show-profile-picture" src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" alt="..."/>
             <div class="d-flex flex-row w-100 justify-content-between">

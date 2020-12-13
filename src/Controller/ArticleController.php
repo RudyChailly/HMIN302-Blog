@@ -14,12 +14,14 @@ use App\Form\Report\ReportCommentType;
 use App\Form\User\RegistrationType;
 use App\Form\User\UserFollowType;
 use App\Repository\CommentRepository;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @Route("/article")
@@ -30,6 +32,19 @@ class ArticleController extends AbstractController
      * @Route("/", name="article_index", methods={"GET"})
      */
     public function index(Request $request): Response
+    {
+        if ($this->getUser()) {
+            if(count($this->getUser()->getFollows()) > 0) {
+                return $this->redirectToRoute('article_follows');
+            }
+        }
+        return $this->redirectToRoute('article_all');
+    }
+
+    /**
+     * @Route("/all", name="article_all", methods={"GET"})
+     */
+    public function all(Request $request): Response
     {
         $articleRepository = $this->getDoctrine()->getRepository(Article::class);
         $articles = $articleRepository->findAll();
@@ -45,6 +60,63 @@ class ArticleController extends AbstractController
             $viewParameters['formSignUp'] = $formSignUp->createView();
         }
         return $this->render('article/index.html.twig', $viewParameters);
+    }
+
+    /**
+     * @Route("/follows", name="article_follows", methods={"GET"})
+     */
+    public function follows(Request $request): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('article_all');
+        }
+        $articleRepository = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $articleRepository->findByFollows($this->getUser());
+        $viewParameters = [
+            'controller_name' => 'ArticleController',
+            'articles' => $articles
+        ];
+        return $this->render('article/index.html.twig', $viewParameters);
+    }
+
+    /**
+     * @Route("/partners", name="article_partners_index", methods={"GET"})
+     */
+    public function partners(Request $request,HttpClientInterface $client): Response
+    {
+        $response = $client->request(
+            'GET',
+            'https://didier-martin-blog.herokuapp.com/api'
+        );
+        $articles = json_decode($response->getContent())->data;
+        $viewParameters = [
+            'controller_name' => 'ArticleController',
+            'articles' => $articles
+        ];
+        return $this->render('article/index.html.twig', $viewParameters);
+    }
+
+    /**
+     * @Route("/partners/{id}", name="article_partners_show", methods={"GET"})
+     */
+    public function partners_show(Request $request,HttpClientInterface $client, int $id): Response
+    {
+        $viewParameters = [
+            'controller_name' => 'ArticleController'
+        ];
+        $response = $client->request(
+            'GET',
+            'https://didier-martin-blog.herokuapp.com/api'
+        );
+        $articles = json_decode($response->getContent())->data;
+        foreach ($articles as $article) {
+            if ($article->id == $id) {
+                $viewParameters['article'] = $article;
+                return $this->render('article/show.html.twig', $viewParameters);
+            }
+        }
+        $viewParameters['articles'] = $articles;
+        return $this->render('article/articles.html.twig', $viewParameters);
     }
 
     /**
@@ -109,7 +181,7 @@ class ArticleController extends AbstractController
                 $entityManager->persist($this->getUser());
                 $entityManager->persist($user);
                 $entityManager->flush();
-                return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
+                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
 
             $reportArticle = new ReportArticle();

@@ -32,3 +32,22 @@
 .article-content {
   line-height: 1.625rem !important;
 }
+
+.article-preview-default-thumbnail {
+  background-color: $default !important;
+  height: 150px;
+  color: $grey !important;
+}
+
+.article-show-default-thumbnail {
+  @extend .article-show-thumbnail;
+  background-color: $default !important;
+  color: $grey !important;
+}
+
+.article-show-user {
+  &:hover {
+    background-color: $light-grey !important;
+    text-decoration: none;
+  }
+}

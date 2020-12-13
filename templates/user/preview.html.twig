@@ -1,4 +1,4 @@
-<a href="{{ path('user_show', {'username': user.username}) }}" class="card p-3 user-preview border-bottom-0 border-radius-0">
+<a href="{{ path('user_show', {'username': user.username}) }}" class="card p-3 border-bottom-0 border-top-0 border-radius-0 bg-transparent text-decoration-none">
     <img src="{{ asset('uploads/user/' ~ user.profilePicture ) }}" class="user-preview-profile-picture m-auto">
     <div class="card-body m-auto pb-0">
         <div class="text-primary font-weight-bold"> {{ user.username }} </div>

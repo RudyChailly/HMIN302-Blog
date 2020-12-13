@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<div class="container mt-3">
+    <h1 class="mb-3"> Administration </h1>
+    {{ include('admin/nav.html.twig') }}
+    <div class="bg-white border-top-0 border p-3">
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th scope="col" class="border-top-0">#</th>
+            <th scope="col" class="border-top-0">Titre</th>
+            <th scope="col" class="border-top-0">Date</th>
+            <th scope="col" class="border-top-0">Commentaires</th>
+            <th scope="col" class="border-top-0">Signalements</th>
+            <th scope="col" class="border-top-0"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+        <tr>
+            <th scope="row">{{ article.id }}</th>
+            <td> {{ article.title|slice(0,50) }}{% if article.title|length > 50 %}...{% endif %}</td>
+            <td> {{ article.published|date("d/m/y à H:i") }}</td>
+            <td class="text-center"> {{ article.comments|length }}</td>
+            <td class="text-center"> {{ article.reportedBy|length }}</td>
+            <td> {{ include('article/_delete_form.html.twig', {'id': article.id}) }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}
