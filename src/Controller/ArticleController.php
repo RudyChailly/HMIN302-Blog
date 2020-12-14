@@ -88,7 +88,19 @@ class ArticleController extends AbstractController
             'GET',
             'https://didier-martin-blog.herokuapp.com/api'
         );
-        $articles = json_decode($response->getContent())->data;
+        $articlesRecuperes = json_decode($response->getContent())->data;
+        $articles = [];
+        foreach ($articlesRecuperes as $articleRecupere) {
+            $article = new Article();
+            $article->setId($articleRecupere->id);
+            $article->setTitle($articleRecupere->title);
+            $article->setContent($articleRecupere->content);
+            $date = date_create_from_format('Y-m-d H:i:s.u', $articleRecupere->datePost->date);
+            $article->setPublished($date);
+            $article->setComments(null);
+            array_push($articles, $article);
+        }
+
         $viewParameters = [
             'controller_name' => 'ArticleController',
             'articles' => $articles
@@ -108,15 +120,21 @@ class ArticleController extends AbstractController
             'GET',
             'https://didier-martin-blog.herokuapp.com/api'
         );
-        $articles = json_decode($response->getContent())->data;
-        foreach ($articles as $article) {
-            if ($article->id == $id) {
+        $articlesRecuperes = json_decode($response->getContent())->data;
+        foreach ($articlesRecuperes as $articleRecupere) {
+            if ($articleRecupere->id == $id) {
+                $article = new Article();
+                $article->setId($articleRecupere->id);
+                $article->setTitle($articleRecupere->title);
+                $article->setContent($articleRecupere->content);
+                $date = date_create_from_format('Y-m-d H:i:s.u', $articleRecupere->datePost->date);
+                $article->setPublished($date);
+                $article->setComments(null);
                 $viewParameters['article'] = $article;
                 return $this->render('article/show.html.twig', $viewParameters);
             }
         }
-        $viewParameters['articles'] = $articles;
-        return $this->render('article/articles.html.twig', $viewParameters);
+        return $this->redirectToRoute('article_partners_index');
     }
 
     /**

@@ -1,5 +1,5 @@
 <div class="col-4 py-3 article-preview"
-        {% if article.urlAlias is defined %}
+        {% if article.urlAlias is not null %}
             onclick="location.href='{{ path('article_show', {'urlAlias': article.urlAlias}) }}'"
         {% else %}
             onclick="location.href='{{ path('article_partners_show', {'id': article.id|number_format}) }}'"
@@ -16,7 +16,7 @@
                 </div>
             {% endif %}
         <div class="card-body pt-1 px-0 pb-2">
-            {% if article.category is defined %}
+            {% if article.category is not null %}
             <a class="text-primary text-uppercase article-preview-category" href="#">
                 {{ article.category.name }}
             </a>
@@ -28,25 +28,19 @@
 
         </div>
         <div class="card-footer bg-transparent border-0 p-0">
-            {% if article.author is defined %}
+            {% if article.author is not null %}
             <a href="{{ path('user_show', {'username': article.author.username}) }}"> {{ article.author.username }} </a>
             {% endif %}
             <div class="d-flex justify-content-between">
                 <div class="d-flex flex-row">
-                    {% if (article.published is defined) or (article.datePost is defined) %}
                     <svg xmlns="http://www.w3.org/2000/svg" height="21px" fill="currentColor" class="bi bi-calendar-event icon mr-1" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
                         <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
                     </svg>
-                        {% if (article.published is defined) %}
-                            <div> {{ article.published|date("d/m/y") }} </div>
-                            {% else %}
-                                <div> {{ article.datePost.date|date("d/m/y") }} </div>
-                            {% endif %}
-                    {% endif %}
+                    <div> {{ article.published|date("d/m/y") }} </div>
                 </div>
                 <div class="d-flex flex-row">
-                    {% if article.comments is defined %}
+                    {% if article.comments is not null %}
                     <div> {{ article.comments|length }} </div>
                     <svg height="24px" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-chat-left-text icon ml-1" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
