@@ -14,7 +14,7 @@
                     <div class="comment-date my-auto mr-1 {% if not app.user %}pr-3{% endif %}">
                         <span> {{ comment.published|date("d/m/Y | H:i") }} </span>
                     </div>
-                    {% if app.user and comment.author.id!=app.user.id %}
+                    {% if app.user%}
                         <div class="dropdown dropdown-comment">
                             <button class="btn btn-link" type="button" id="dropdownComment-{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -22,6 +22,7 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="dropdownComment-{{ comment.id }}">
+                                {% if comment.author.id!=app.user.id %}
                                 <button class="dropdown-item pl-2 reportCommentButton" id="commentReportButton-{{ comment.id }}" type="button" data-toggle="modal" data-target="#reportCommentModal">
                                     <span class="pr-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
@@ -33,6 +34,7 @@
                                         Signaler
                                     </span>
                                 </button>
+                                {% endif %}
                                 {% if (comment.author.id==app.user.id or app.user.isAdmin())%}
                                     {{ include('comment/_delete_form.html.twig') }}
                                 {% endif %}
