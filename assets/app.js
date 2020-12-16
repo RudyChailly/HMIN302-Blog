@@ -15,6 +15,8 @@ const $ = require('jquery');
 require('bootstrap');
 require('./scripts/ReportComment');
 
-
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
 console.log('Hello Webpack Encore! Edit me in assets/app.js');

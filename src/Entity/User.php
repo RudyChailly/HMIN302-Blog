@@ -50,12 +50,12 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="author")
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="author", cascade={"remove"})
      */
     private $articles;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author", cascade={"remove"})
      */
     private $comments;
 
@@ -70,12 +70,12 @@ class User implements UserInterface
     private $followers;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="author")
+     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="author", cascade={"remove"})
      */
     private $reportsUser;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="target")
+     * @ORM\OneToMany(targetEntity=ReportUser::class, mappedBy="target", cascade={"remove"})
      */
     private $reportedBy;
 
@@ -90,12 +90,12 @@ class User implements UserInterface
     private $coverPicture;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="author")
+     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="author", cascade={"remove"})
      */
     private $reportsArticle;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="author")
+     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="author", cascade={"remove"})
      */
     private $reportsComment;
 

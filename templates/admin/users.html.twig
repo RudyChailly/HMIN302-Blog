@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+    <div class="container mt-3">
+        <h1 class="mb-3"> Administration </h1>
+        {{ include('admin/nav.html.twig', {'navActive': 'user'}) }}
+        <div class="bg-white border-top-0 border p-3">
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th scope="col" class="border-top-0 text-uppercase font-size-08">Pseudo</th>
+                    <th scope="col" class="border-top-0 text-uppercase font-size-08">Email</th>
+                    <th scope="col" class="border-top-0 text-uppercase font-size-08 text-right">Abonnés</th>
+                    <th scope="col" class="border-top-0 text-uppercase font-size-08 text-right">Abonnements</th>
+                    <th scope="col" class="border-top-0 text-uppercase font-size-08 text-right">Signalements</th>
+                    <th scope="col" class="border-top-0"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr class="table-hover-text-primary">
+                        <td onclick="location.href = '{{ path('user_show', {'username': user.username}) }}'" class="cursor-pointer"> {{ user.username }}</td>
+                        <td onclick="location.href = '{{ path('user_show', {'username': user.username}) }}'" class="cursor-pointer"> {{ user.email }}</td>
+                        <td onclick="location.href = '{{ path('user_show', {'username': user.username}) }}'" class="cursor-pointer text-right"> {{ user.followers|length }}</td>
+                        <td onclick="location.href = '{{ path('user_show', {'username': user.username}) }}'" class="cursor-pointer text-right"> {{ user.follows|length }}</td>
+                        <td onclick="location.href = '{{ path('user_show', {'username': user.username}) }}'" class="cursor-pointer text-right">
+                            <span {% if user.reportedBy|length > 0 %} class="badge badge-pill badge-danger" {% endif %}>
+                                {{ user.reportedBy|length }}
+                            </span>
+                        </td>
+                        <td> {{ include('user/_delete_form.html.twig', {'id': user.id}) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

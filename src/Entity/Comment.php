@@ -42,7 +42,7 @@ class Comment
     private $article;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="target")
+     * @ORM\OneToMany(targetEntity=ReportComment::class, mappedBy="target", cascade={"remove"})
      */
     private $reportedBy;
 

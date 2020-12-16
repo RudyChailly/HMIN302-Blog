@@ -5,32 +5,34 @@
 {% block body %}
 <div class="container mt-3">
     <h1 class="mb-3"> Administration </h1>
-    {{ include('admin/nav.html.twig') }}
+    {{ include('admin/nav.html.twig', {'navActive': 'article'}) }}
     <div class="bg-white border-top-0 border p-3">
-    <table class="table table-sm">
-        <thead>
-        <tr>
-            <th scope="col" class="border-top-0">#</th>
-            <th scope="col" class="border-top-0">Titre</th>
-            <th scope="col" class="border-top-0">Date</th>
-            <th scope="col" class="border-top-0">Commentaires</th>
-            <th scope="col" class="border-top-0">Signalements</th>
-            <th scope="col" class="border-top-0"></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-        <tr>
-            <th scope="row">{{ article.id }}</th>
-            <td> {{ article.title|slice(0,50) }}{% if article.title|length > 50 %}...{% endif %}</td>
-            <td> {{ article.published|date("d/m/y à H:i") }}</td>
-            <td class="text-center"> {{ article.comments|length }}</td>
-            <td class="text-center"> {{ article.reportedBy|length }}</td>
-            <td> {{ include('article/_delete_form.html.twig', {'id': article.id}) }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-sm table-hover mb-0">
+            <thead>
+            <tr>
+                <th scope="col" class="border-top-0 text-uppercase font-size-08">Créé le</th>
+                <th scope="col" class="border-top-0 text-uppercase font-size-08">Titre</th>
+                <th scope="col" class="border-top-0 text-uppercase font-size-08 text-right">Commentaires</th>
+                <th scope="col" class="border-top-0 text-uppercase font-size-08 text-right">Signalements</th>
+                <th scope="col" class="border-top-0 text-uppercase font-size-08"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+            <tr class="table-hover-text-primary">
+                <td onclick="location.href = '{{ path('article_show', {'urlAlias': article.urlAlias}) }}'" class="cursor-pointer"> {{ article.published|date("d/m/y | H:i") }}</td>
+                <td onclick="location.href = '{{ path('article_show', {'urlAlias': article.urlAlias}) }}'" class="cursor-pointer" data-toggle="tooltip" data-placement="top" data-html="true" title="<div><span class='font-size-08'> {{ article.title }} </span><div>"> {{ article.title|slice(0,50) }}{% if article.title|length > 50 %}...{% endif %}</td>
+                <td onclick="location.href = '{{ path('article_show', {'urlAlias': article.urlAlias}) }}'" class="text-right cursor-pointer"> {{ article.comments|length }}</td>
+                <td onclick="location.href = '{{ path('article_show', {'urlAlias': article.urlAlias}) }}'" class="text-right cursor-pointer">
+                    <span {% if article.reportedBy|length > 0 %} class="badge badge-pill badge-danger" {% endif %}>
+                        {{ article.reportedBy|length }}
+                    </span>
+                </td>
+                <td> {{ include('article/_delete_form.html.twig', {'id': article.id}) }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

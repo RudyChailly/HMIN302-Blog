@@ -68,7 +68,7 @@ class Article
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article", cascade={"remove"})
      */
     private $comments;
 
@@ -78,7 +78,7 @@ class Article
     private $thumbnail;
 
     /**
-     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="target")
+     * @ORM\OneToMany(targetEntity=ReportArticle::class, mappedBy="target", cascade={"remove"})
      */
     private $reportedBy;
 

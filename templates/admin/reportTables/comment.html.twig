@@ -1,0 +1,28 @@
+<div class="bg-white border p-3">
+    <table class="table table-sm table-hover mb-0">
+        <thead>
+        <tr>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08 w-25">Commentaire</th>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08">Catégorie</th>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08 w-25">Description</th>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08">Signalé par</th>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08">Signalé le</th>
+            <!--<th scope="col" class="border-top-0 text-uppercase font-size-08" colspan="2"></th>-->
+        </tr>
+        </thead>
+        <tbody>
+        {% for report in reportedComments %}
+            <tr class="table-hover-text-primary">
+                <td> {{ report.target.content|slice(0,20) }}{% if report.target.content|length > 20 %}...{% endif %}</td>
+                <td> {{ report.category }}</td>
+                <td class="text-break"> {{ report.description }}</td>
+                <td> {{ report.author.username }}</td>
+                <td> {{ report.created|date("d/m/y | H:i") }}</td>
+                <!--<td> {{ include('article/_delete_form.html.twig', {'article': report.target}) }}</td>
+                <td> {{ include('report/article/_delete_form.html.twig', {'report_article': report}) }}</td>-->
+                <!--TODO Bouton action avec icons-->
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
