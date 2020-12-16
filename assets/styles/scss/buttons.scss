@@ -9,14 +9,20 @@
 
 .btn-grey {
   color: #fff !important;
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
+  background-color: $grey !important;
+  border-color: $grey !important;
 
   &:hover {
     color: #fff !important;
     background-color: #5a6268 !important;
     border-color: #545b62 !important;
   }
+}
+
+.btn-outline-grey {
+  @extend .btn-grey;
+  color: $grey !important;
+  background-color: transparent !important;
 }
 
 .btn-secondary {

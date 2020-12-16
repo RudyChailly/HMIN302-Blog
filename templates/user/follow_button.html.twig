@@ -1,9 +1,9 @@
 {% if (followForm is defined) and (app.user is not null) and (user.id != app.user.id) %}
     {{ form_start(followForm) }}
     {% if user in app.user.follows %}
-        {{ form_widget(followForm.follows, { 'attr': {'class': 'btn-pill btn-primary user-show-button-follow user-show-button-unfollow'}, 'label': ' ' }) }}
+        {{ form_widget(followForm.follows, { 'attr': {'class': 'btn-pill btn-primary user-show-button-unfollow btn-action-user'}, 'label': ' ' }) }}
     {% else %}
-        {{ form_widget(followForm.follows, { 'attr': {'class': 'btn-pill btn-outline-primary user-show-button-follow'}, 'label': 'S\'abonner' }) }}
+        {{ form_widget(followForm.follows, { 'attr': {'class': 'btn-pill btn-outline-primary btn-action-user'}, 'label': 'S\'abonner' }) }}
     {% endif %}
     {{ form_end(followForm) }}
 {% endif %}

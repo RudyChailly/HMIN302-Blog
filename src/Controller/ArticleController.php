@@ -98,6 +98,7 @@ class ArticleController extends AbstractController
             $date = date_create_from_format('Y-m-d H:i:s.u', $articleRecupere->datePost->date);
             $article->setPublished($date);
             $article->setComments(null);
+            $article->setReportedBy(null);
             array_push($articles, $article);
         }
 
@@ -130,6 +131,7 @@ class ArticleController extends AbstractController
                 $date = date_create_from_format('Y-m-d H:i:s.u', $articleRecupere->datePost->date);
                 $article->setPublished($date);
                 $article->setComments(null);
+                $article->setReportedBy(null);
                 $viewParameters['article'] = $article;
                 return $this->render('article/show.html.twig', $viewParameters);
             }

@@ -17,6 +17,7 @@ abstract class ReportType extends AbstractType
     {
         $builder
             ->add('category', ChoiceType::class, [
+                'label' => 'Catégorie',
                 'choices' => ReportCategory::getCategories(),
                 'choice_label' => function($category) {
                     return $category;

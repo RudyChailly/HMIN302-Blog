@@ -224,9 +224,16 @@ class Article
     /**
      * @return Collection|ReportArticle[]
      */
-    public function getReportedBy(): Collection
+    public function getReportedBy()
     {
         return $this->reportedBy;
+    }
+
+    public function setReportedBy($reportedBy): self
+    {
+        $this->reportedBy = $reportedBy;
+
+        return $this;
     }
 
     public function addReportedBy(ReportArticle $reportedBy): self

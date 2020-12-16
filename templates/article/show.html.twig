@@ -39,12 +39,12 @@
             {% endif %}
             {% if app.user and (article.author is not null or article.reportedBy is not null)%}
             <div class="text-center py-3 border bg-white">
-                {% if article.author is defined and article.author.id == app.user.id %}
+                {% if article.author is not null and article.author.id == app.user.id %}
                 <a class="btn-pill btn-outline-primary" href="{{ path('article_edit', {'id': article.id}) }}">
                     Editer l'article
                 </a>
                 {% elseif article.reportedBy is defined %}
-                    <button class="btn-pill btn-outline-danger"> Signaler l'article</button>
+                    <button type="button" class="btn-pill btn-outline-danger" data-toggle="modal" data-target="#reportArticleModal"> Signaler l'article</button>
                 {% endif %}
             </div>
             {% endif %}
@@ -63,14 +63,15 @@
         {% for comment in article.comments %}
             {{ include('comment/show.html.twig', {'comment': comment}) }}
         {% endfor %}
+        {% if article.comments|length > 0 %}
+            {{ include('report/comment/_form.html.twig') }}
+        {% endif %}
     {% endif %}
 
-    {{ include('report/comment/_form.html.twig') }}
-
-
-    <div>
-        <h3>Report Article</h3>
-        {{ include('report/_form.html.twig') }}
-    </div>
+    {% if article.reportedBy is not null %}
+        <div>
+            {{ include('report/_form.html.twig', {'modalTitle' : 'Signaler l\'atricle', 'modalId': 'reportArticleModal'}) }}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

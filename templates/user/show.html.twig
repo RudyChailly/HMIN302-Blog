@@ -30,6 +30,7 @@
                         </a>
                     {% else %}
                         {{ include('user/follow_button.html.twig') }}
+                        <button type="button" class="btn-pill btn-outline-danger btn-action-user mt-3" data-toggle="modal" data-target="#reportUserModal"> Signaler </button>
                     {% endif %}
                 </div>
             </div>
@@ -47,7 +48,7 @@
             </div>
         {% endif %}
         {% if app.user and app.user.id != user.id %}
-            {{ include('report/_form.html.twig') }}
+            {{ include('report/_form.html.twig', {'modalTitle': 'Signaler '~user.username, 'modalId': 'reportUserModal'}) }}
         {% endif %}
     </div>
 {% endblock %}

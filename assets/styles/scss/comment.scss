@@ -10,3 +10,10 @@
   font-size: 0.8rem;
   color: #676767;
 }
+
+.dropdown-comment{
+  .dropdown-item:hover{
+    background-color: $light-grey !important;
+    color:$danger !important;
+  }
+}

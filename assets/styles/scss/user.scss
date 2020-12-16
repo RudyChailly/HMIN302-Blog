@@ -41,10 +41,6 @@
   font-size: 2rem;
 }
 
-.user-show-button-follow {
-  width: 150px;
-}
-
 .user-show-button-unfollow {
   &:after {
     content: 'Abonné';
@@ -68,4 +64,8 @@
   height: 300px;
   object-fit: cover;
   background-color: #dbdbdb;
+}
+
+.btn-action-user{
+  width: 150px;
 }
