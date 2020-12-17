@@ -45,6 +45,6 @@ class ReportArticleController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('report_article_index');
+        return $this->redirectToRoute('admin_reports');
     }
 }

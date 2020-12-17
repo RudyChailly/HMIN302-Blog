@@ -1,4 +1,24 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{{ form_start(formArticle) }}
+    <div class="form-group">
+        {{ form_label(formArticle.title) }}
+        {{ form_widget(formArticle.title, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="row">
+        <div class="form-group col">
+            {{ form_label(formArticle.category) }}
+            {{ form_widget(formArticle.category, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col">
+            {{ form_label(formArticle.thumbnail) }}
+            {{ form_widget(formArticle.thumbnail, {'attr': {'class': 'form-control border-0 px-0'}}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(formArticle.content) }}
+        {{ form_widget(formArticle.content, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="d-flex justify-content-end">
+        <a class="btn-pill btn-outline-grey mr-2" href="{{ path('article_index') }}"> Annuler </a>
+        <button class="btn-pill btn-primary">{{ button_label|default('Valider') }}</button>
+    </div>
+{{ form_end(formArticle) }}

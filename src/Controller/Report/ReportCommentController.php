@@ -45,6 +45,6 @@ class ReportCommentController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('report_comment_index');
+        return $this->redirectToRoute('admin_reports');
     }
 }

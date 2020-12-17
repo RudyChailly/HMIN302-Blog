@@ -144,7 +144,6 @@ class ArticleController extends AbstractController
      */
     public function new(Request $request, SluggerInterface $slugger): Response
     {
-        //TODO WYSIWYG
         // TODO Nom images
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
@@ -177,7 +176,7 @@ class ArticleController extends AbstractController
 
         return $this->render('article/new.html.twig', [
             'article' => $article,
-            'form' => $form->createView(),
+            'formArticle' => $form->createView(),
         ]);
     }
 
@@ -229,7 +228,6 @@ class ArticleController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
-            //TODO mettre le formulaire dans un modal
             $reportComment = new ReportComment();
             $reportCommentForm = $this->createForm(ReportCommentType::class, $reportComment);
             $reportCommentForm->handleRequest($request);
@@ -291,7 +289,7 @@ class ArticleController extends AbstractController
 
         return $this->render('article/edit.html.twig', [
             'article' => $article,
-            'form' => $form->createView(),
+            'formArticle' => $form->createView(),
         ]);
     }
 

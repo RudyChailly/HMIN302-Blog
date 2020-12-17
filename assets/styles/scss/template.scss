@@ -28,3 +28,8 @@ h1 {
 .cursor-pointer{
   cursor: pointer !important;
 }
+
+.form-delete-button{
+  @extend .position-absolute;
+  bottom: 1.5rem !important;
+}

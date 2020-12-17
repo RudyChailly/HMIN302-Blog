@@ -1,0 +1,9 @@
+<form method="post" action="{{ path('report_'~reportElement~'_delete', {'id': reportId}) }}" onsubmit="return confirm('Voulez-vous vraiment suppirmer ce signalement?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reportId) }}">
+    <button type="submit" class="btn text-danger pt-0" data-toggle="tooltip" data-placement="top" title="Supprimer le signalement">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x ml-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+        </svg>
+    </button>
+</form>

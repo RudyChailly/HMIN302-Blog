@@ -8,22 +8,43 @@
         {{ form_widget(formUser.email, {'attr': {'class': 'form-control'}}) }}
     </div>
     {% if formUser.password is defined %}
-    <div class="form-group">
-        {{ form_label(formUser.password.first) }}
-        {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control'}}) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(formUser.password.second) }}
-        {{ form_widget(formUser.password.second, {'attr': {'class': 'form-control'}}) }}
-    </div>
+        <div class="form-group">
+            {{ form_label(formUser.password.first) }}
+            {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formUser.password.second) }}
+            {{ form_widget(formUser.password.second, {'attr': {'class': 'form-control'}}) }}
+        </div>
     {% endif %}
-    <div class="text-center">
-        <button class="mt-2 px-4 btn-pill btn-primary">{{ button_label|default('Valider') }}</button>
-    </div>
 
+    {% if action == 'update' %}
+        <div class="row">
+            <div class="col form-group">
+                {{ form_label(formUser.profile_picture) }}
+                {{ form_widget(formUser.profile_picture, {'attr': {'class': 'form-control border-0 px-0'}}) }}
+            </div>
+            <div class="col form-group">
+                {{ form_label(formUser.cover_picture) }}
+                {{ form_widget(formUser.cover_picture, {'attr': {'class': 'form-control border-0 px-0'}}) }}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if action == 'create' %}
+        <div class="text-center">
+            <button class="mt-2 px-4 btn-pill btn-primary">{{ button_label|default('Valider') }}</button>
+        </div>
+    {% elseif action == 'update' %}
+        <div class="d-flex justify-content-end mt-4">
+                <a href="{{ path("user_show", {'username': app.user.username}) }}" class="btn-pill btn-outline-grey mr-2"> Annuler</a>
+                <button class="btn-pill btn-primary" type="submit">{{ button_label|default('Valider') }}</button>
+        </div>
+    {% endif %}
+
+    {% if action == 'create' %}
     <div class="text-center mt-4">
         Vous avez déjà un compte ? <a href="{{ path('app_login')}}"> Connectez-vous </a>
     </div>
-
-
+    {% endif %}
 {{ form_end(formUser) }}
