@@ -36,3 +36,13 @@
     border-color: #0069d9 !important;
   }
 }
+
+.btn-outline-white {
+  color: white !important;
+  border-color: white !important;
+  &:hover {
+    color: $primary !important;
+    background-color: white;
+    border-color: white;
+  }
+}

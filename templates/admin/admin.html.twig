@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord {% endblock %}
+
+{% block body %}
+<div class="bg-primary">
+    <div class="container">
+        <h1 class="mb-0 text-white py-3"> Tableau de bord </h1>
+    </div>
+</div>
+
+<div class="container mt-3">
+    {{ include('admin/nav.html.twig') }}
+    <div class="bg-white mt-3">
+      {% block table %} {% endblock%}
+    </div>
+</div>
+{% endblock %}

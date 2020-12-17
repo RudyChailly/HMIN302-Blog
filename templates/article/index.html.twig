@@ -3,46 +3,41 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-
-    <div class="container mt-3">
-        <div class="d-flex justify-content-between mb-3">
-            <h1 class="mb-0"> Articles </h1>
-        {% if (app.user) %}
-            <a class="btn-pill btn-outline-primary my-auto" href="{{ path('article_new') }}">
-                Nouvel article
-            </a>
-        {% endif %}
-        </div>
-        <ul class="nav nav-tabs nav-fill">
-            {% if app.user %}
-                <li class="nav-item">
-                    {% if 'follows' in app.request.pathinfo %}
-                        <div class="nav-link active text-uppercase font-weight-bold">Articles suivis</div>
-                    {% else %}
-                        <a class="nav-link text-uppercase" href="{{ path('article_follows') }}">Articles suivis</a>
-                    {% endif %}
-                </li>
-            {% endif %}
-            <li class="nav-item">
-                {% if 'all' in app.request.pathinfo %}
-                    <div class="nav-link active text-uppercase font-weight-bold">Tous les articles</div>
-                {% else %}
-                    <a class="nav-link text-uppercase" href="{{ path('article_all') }}">Tous les articles</a>
+    <div class="bg-primary">
+        <div class="container">
+            <div class="d-flex justify-content-between py-3">
+                <h1 class="mb-0 text-white"> Articles </h1>
+                {% if (app.user) %}
+                    <a class="btn-pill btn-outline-white my-auto" href="{{ path('article_new') }}">
+                        Nouvel article
+                    </a>
                 {% endif %}
-            </li>
-            <li class="nav-item">
-                {% if 'partners' in app.request.pathinfo %}
-                    <div class="nav-link active text-uppercase font-weight-bold">Articles partenaires</div>
-                {% else %}
-                    <a class="nav-link text-uppercase" href="{{ path('article_partners_index') }}">Articles partenaires</a>
-                {% endif %}
-            </li>
-        </ul>
-        <div class="bg-white card-group border border-top-0">
-        {% for article in articles %}
-            {{ include('article/preview.html.twig', {'article': article}) }}
-        {% endfor %}
+            </div>
         </div>
     </div>
 
+
+    <div class="bg-white pt-3">
+        <div class="container">
+                <div>
+            {{ include('article/nav.html.twig') }}
+            <div class="card-group bg-white">
+            {% for article in articles %}
+                {{ include('article/preview.html.twig', {'article': article}) }}
+            {% else %}
+                <div class="alert alert-dark w-100 mt-3">
+                    {% if active == 'follows' %}
+                        Aucune des personnes que vous suivez n'a publié d'articles.
+                    {% elseif active == 'partners' %}
+                        Erreur lors de la récupération des articles.
+                    {% else %}
+                        Aucun article n'est disponible
+                    {% endif %}
+                </div>
+            {% endfor %}
+            </div>
+                </div>
+        </div>
+    </div>
+    </div>
 {% endblock %}

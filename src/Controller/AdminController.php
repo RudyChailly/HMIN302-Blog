@@ -31,6 +31,8 @@ class AdminController extends AbstractController
 
         return $this->render('admin/articles.html.twig', [
             'controller_name' => 'AdminController',
+            'backgroundColor' => 'white',
+            'active' => 'articles',
             'articles' => $articles
         ]);
     }
@@ -45,6 +47,8 @@ class AdminController extends AbstractController
 
         return $this->render('admin/users.html.twig', [
             'controller_name' => 'AdminController',
+            'backgroundColor' => 'white',
+            'active' => 'users',
             'users' => $users
         ]);
     }
@@ -63,6 +67,8 @@ class AdminController extends AbstractController
 
         return $this->render('admin/reports.html.twig', [
             'controller_name' => 'AdminController',
+            'backgroundColor' => 'white',
+            'active' => 'reports',
             'reportedArticles' => $articles,
             'reportedUsers' => $users,
             'reportedComments' => $comments

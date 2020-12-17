@@ -1,23 +1,32 @@
-<ul class="nav nav-tabs nav-fill">
-    <li class="nav-item">
-        {% if navActive == 'article' %}
-            <div class="nav-link active font-weight-bold text-uppercase">Articles</div>
+<div class="d-flex text-center font-weight-bold bg-white">
+    {% if app.user %}
+        {% if active == 'articles' %}
+            <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+                Articles
+            </div>
         {% else %}
-            <a class="nav-link text-uppercase" href="{{ path('admin_articles') }}">Articles</a>
+            <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_articles') }}">
+                Articles
+            </a>
         {% endif %}
-    </li>
-    <li class="nav-item">
-        {% if navActive == 'user' %}
-            <div class="nav-link active font-weight-bold text-uppercase">Utilisateurs</div>
-        {% else %}
-            <a class="nav-link text-uppercase" href="{{ path('admin_users') }}">Utilisateurs</a>
-        {% endif %}
-    </li>
-    <li class="nav-item">
-        {% if navActive == 'report' %}
-            <div class="nav-link active font-weight-bold text-uppercase">Signalements</div>
-        {% else %}
-            <a class="nav-link text-uppercase" href="{{ path('admin_reports') }}">Signalements</a>
-        {% endif %}
-    </li>
-</ul>
+    {% endif %}
+    {% if active == 'users'  %}
+        <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+            Utilisateurs
+        </div>
+    {% else %}
+        <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_users') }}">
+            Utilisateurs
+        </a>
+    {% endif %}
+    {% if active == 'reports' %}
+        <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+            Signalements
+        </div>
+    {% else %}
+        <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_reports') }}">
+            Signalements
+        </a>
+    {% endif %}
+
+</div>

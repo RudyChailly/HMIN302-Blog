@@ -5,7 +5,7 @@ html {
 }
 
 body {
-  background-color: $dark !important;
+  background-color: $background !important;
   padding-right: 0 !important;
   font-family: 'Montserrat', sans-serif !important;
 }
@@ -25,6 +25,10 @@ h1 {
   font-size: 0.8rem !important;
 }
 
+.font-size-09 {
+  font-size: 0.9rem !important;
+}
+
 .cursor-pointer{
   cursor: pointer !important;
 }
@@ -32,4 +36,32 @@ h1 {
 .form-delete-button{
   @extend .position-absolute;
   bottom: 1.5rem !important;
+}
+
+.text-black {
+  color: $black !important;
+}
+
+.text-grey {
+  color: $grey !important;
+}
+
+.nav-tabs-border-0 {
+  a:hover {
+    border-color: transparent transparent transparent!important;
+  }
+}
+
+.border-width-medium {
+  border-width: medium !important;
+}
+
+.border-bottom-width-2 {
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+.text-hover-primary {
+  &:hover {
+    color: $primary !important
+  }
 }

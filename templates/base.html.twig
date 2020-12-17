@@ -8,7 +8,7 @@
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
     </head>
-    <body>
+    <body {% if backgroundColor is defined %} class="bg-{{ backgroundColor }}"{% endif %}>
         <header> {{ include('_base/menu.html.twig') }}</header>
         <main>
                 {% block body %}{% endblock %}

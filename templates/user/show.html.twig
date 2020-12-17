@@ -41,7 +41,6 @@
         </div>
         {% if user.articles|length > 0 %}
             <div class="bg-white border border-top-0">
-                <h3 class="pt-3 ml-3 font-weight-bold"> Articles rédigés </h3>
                 <div class="card-group">
                     {% for article in articles %}
                         {{ include('article/preview.html.twig', {'article': article}) }}

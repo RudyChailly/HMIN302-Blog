@@ -7,19 +7,21 @@
             <th scope="col" class="border-top-0 text-uppercase font-size-08 w-25">Description</th>
             <th scope="col" class="border-top-0 text-uppercase font-size-08">Signalé par</th>
             <th scope="col" class="border-top-0 text-uppercase font-size-08">Signalé le</th>
-            <th scope="col" class="border-top-0 text-uppercase font-size-08" colspan="2"></th>
+            <th scope="col" class="border-top-0 text-uppercase font-size-08 text-center"> Supprimer ?</th>
         </tr>
         </thead>
         <tbody>
         {% for report in reportedUsers %}
             <tr class="table-hover-text-primary">
-                <td> {{ report.target.username }}</td>
+                <td> <a class="text-decoration-none" href="{{ path('user_show', {'username': report.target.username}) }}"> {{ report.target.username }} </a> </td>
                 <td> {{ report.category }}</td>
                 <td class="text-break"> {{ report.description }}</td>
-                <td> {{ report.author.username }}</td>
+                <td> <a class="text-decoration-none" href="{{ path('user_show', {'username': report.author.username}) }}">  {{ report.author.username }} </a> </td>
                 <td> {{ report.created|date("d/m/y | H:i") }}</td>
-                <td> {{ include('user/_delete_icon_form.html.twig', {'user': report.target}) }}</td>
-                <td> {{ include('report/_delete_icon_form.html.twig', {'reportElement': 'user', 'reportId': report.id}) }}</td>
+                <td class="d-flex justify-content-center">
+                    {{ include('user/_delete_icon_check.html.twig', {'user': report.target}) }}
+                    {{ include('report/_delete_icon_x.html.twig', {'reportElement': 'user', 'reportId': report.id}) }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

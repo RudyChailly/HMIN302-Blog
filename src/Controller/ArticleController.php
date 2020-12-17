@@ -51,6 +51,8 @@ class ArticleController extends AbstractController
 
         $viewParameters = [
             'controller_name' => 'ArticleController',
+            'active' => 'all',
+            'backgroundColor' => 'white',
             'articles' => $articles
         ];
         if (!$this->getUser()) {
@@ -74,6 +76,8 @@ class ArticleController extends AbstractController
         $articles = $articleRepository->findByFollows($this->getUser());
         $viewParameters = [
             'controller_name' => 'ArticleController',
+            'active' => 'follows',
+            'backgroundColor' => 'white',
             'articles' => $articles
         ];
         return $this->render('article/index.html.twig', $viewParameters);
@@ -104,6 +108,8 @@ class ArticleController extends AbstractController
 
         $viewParameters = [
             'controller_name' => 'ArticleController',
+            'active' => 'partners',
+            'backgroundColor' => 'white',
             'articles' => $articles
         ];
         return $this->render('article/index.html.twig', $viewParameters);
