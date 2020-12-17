@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-9">
-            <div class="bg-white text-justify article-content border border-top-0">
+            <div class="bg-white text-justify article-content border-top-0">
                 {% if article.thumbnail is not null%}
                     <img class="article-show-thumbnail" src="{{ asset('uploads/article/' ~ article.thumbnail ) }}" alt="..."/>
                 {% else %}
@@ -19,14 +19,14 @@
                         </svg>
                     </div>
                 {% endif %}
-                <h3 class="p-3 font-weight-bold"> {{ article.title }} </h3>
-                <div class="px-3 pb-3">
+                <h3 class="py-3 font-weight-bold"> {{ article.title }} </h3>
+                <div class="pb-3">
                     {{ article.content|raw }}
                 </div>
             </div>
         </div>
         <div class="col-3">
-            <div>
+            <div class="shadow">
             <div class="text-center bg-white border p-3">
                 {% if article.category is not null %}<a href="#" class="text-decoration-none"> {{ article.category.name}}  </a> {% endif %}
                     <div> {{ article.published|date("d/m/Y | H:i") }} </div>
@@ -59,7 +59,11 @@
     {% if article.comments is not null %}
         <div class="row mt-3">
             <div class="col-12">
-                <h4 class="p-3 mb-0 border font-weight-bold bg-white"> Commentaires   <span class="font-weight-normal"> ({{ article.comments|length }}) </span> </h4>
+                <h3 class="pb-3 pt-4 mb-0 font-weight-bold border-top">
+                    <div class="pl-2 border-left-width-4 border-primary">
+                        Commentaires   <span class="font-weight-normal"> ({{ article.comments|length }}) </span>
+                    </div>
+                </h3>
             </div>
         </div>
 

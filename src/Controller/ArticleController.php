@@ -251,11 +251,13 @@ class ArticleController extends AbstractController
                 'followForm' => $followForm->createView(),
                 'formNewComment' => $formNewComment->createView(),
                 'reportForm' => $reportForm->createView(),
+                'backgroundColor' => 'white',
                 'reportCommentForm' => $reportCommentForm->createView()
             ]);
         }
         return $this->render('article/show.html.twig', [
-            'article' => $article
+            'article' => $article,
+            'backgroundColor' => 'white'
         ]);
     }
 

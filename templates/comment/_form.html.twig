@@ -1,5 +1,5 @@
 {% if app.user and formNewComment is defined %}
-{{ form_start(formNewComment, {'attr': {'class': 'p-3 bg-white border border-top-0'}}) }}
+{{ form_start(formNewComment, {'attr': {'class': 'mb-4'}}) }}
     <div class="form-group">
         {{ form_widget(formNewComment.content, {'attr': {'class': 'form-control'}}) }}
     </div>
