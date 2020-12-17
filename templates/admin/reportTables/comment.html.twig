@@ -18,7 +18,7 @@
                 <td class="text-break"> {{ report.description }}</td>
                 <td> {{ report.author.username }}</td>
                 <td> {{ report.created|date("d/m/y | H:i") }}</td>
-                <!--<td> {{ include('article/_delete_form.html.twig', {'article': report.target}) }}</td>-->
+                <td> {{ include('comment/_delete_icon_form.html.twig', {'comment': report.target}) }}</td>
                 <td> {{ include('report/_delete_icon_form.html.twig', {'reportElement': 'comment', 'reportId': report.id}) }}</td>
                 <!--TODO Bouton action avec icons-->
             </tr>
