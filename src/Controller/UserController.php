@@ -8,6 +8,7 @@ use App\Form\Report\ReportUserType;
 use App\Form\User\RegistrationType;
 use App\Form\User\UserEditType;
 use App\Form\User\UserFollowType;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
@@ -59,11 +60,13 @@ class UserController extends AbstractController
         return $this->redirectToRoute('article_index');
     }
 
+
     /**
      * @Route("/{username}", name="user_show", methods={"GET", "POST"})
      */
-    public function show(User $user, Request $request): Response
+    public function show(User $user, Request $request,ArticleRepository $articleRepository): Response
     {
+        $articles = $articleRepository->findBy(['author'=>$user->getId()], ['published'=>'DESC']);
         if ($this->getUser()) {
             $reportUser = new ReportUser();
             $reportForm = $this->createForm(ReportUserType::class, $reportUser);
@@ -96,6 +99,7 @@ class UserController extends AbstractController
 
             return $this->render('user/show.html.twig', [
                 'user' => $user,
+                'articles'=>$articles,
                 'reportForm' => $reportForm->createView(),
                 'followForm' => $followForm->createView()
             ]);
