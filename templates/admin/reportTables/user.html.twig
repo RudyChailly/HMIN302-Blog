@@ -20,7 +20,6 @@
                 <td> {{ report.created|date("d/m/y | H:i") }}</td>
                 <td> {{ include('user/_delete_icon_form.html.twig', {'user': report.target}) }}</td>
                 <td> {{ include('report/_delete_icon_form.html.twig', {'reportElement': 'user', 'reportId': report.id}) }}</td>
-                <!--TODO Bouton action avec icons-->
             </tr>
         {% endfor %}
         </tbody>
