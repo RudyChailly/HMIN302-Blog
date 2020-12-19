@@ -15,26 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReportCommentController extends AbstractController
 {
     /**
-     * @Route("/", name="report_comment_index", methods={"GET"})
-     */
-    public function index(ReportCommentRepository $reportCommentRepository): Response
-    {
-        return $this->render('report/comment/articles.html.twig', [
-            'report_comments' => $reportCommentRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="report_comment_show", methods={"GET"})
-     */
-    public function show(ReportComment $reportComment): Response
-    {
-        return $this->render('comment/show.html.twig', [
-            'comment' => $reportComment,
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="report_comment_delete", methods={"DELETE"})
      */
     public function delete(Request $request, ReportComment $reportComment): Response

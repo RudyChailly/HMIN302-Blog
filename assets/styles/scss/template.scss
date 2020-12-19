@@ -1,13 +1,22 @@
 html {
   overflow-y: scroll !important;
   position: relative;
-  min-height: 100%;
+  min-height: 130%;
 }
 
 body {
   background-color: $background !important;
   padding-right: 0 !important;
   font-family: 'Montserrat', sans-serif !important;
+  height: 100%;
+  margin-bottom: 200px !important;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #e7e7e7;
 }
 
 h1 {
@@ -29,6 +38,10 @@ h1 {
   font-size: 0.9rem !important;
 }
 
+.font-size-11 {
+  font-size: 1.1rem !important;
+}
+
 .cursor-pointer{
   cursor: pointer !important;
 }
@@ -46,26 +59,13 @@ h1 {
   color: $grey !important;
 }
 
-.nav-tabs-border-0 {
-  a:hover {
-    border-color: transparent transparent transparent!important;
-  }
-}
-
-.border-width-medium {
-  border-width: medium !important;
-}
-
-.border-bottom-width-2 {
-  border-bottom: 2px solid #dee2e6 !important;
-}
-
-.border-left-width-4 {
-  border-left: 4px solid #dee2e6 !important;
-}
-
 .text-hover-primary {
   &:hover {
     color: $primary !important
+  }
+}
+.table-hover-text-primary{
+  &:hover{
+    color: $primary !important;
   }
 }

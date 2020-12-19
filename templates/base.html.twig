@@ -13,6 +13,7 @@
         <main>
                 {% block body %}{% endblock %}
         </main>
+        <footer class="bg-white shadow">  {{ include('_base/footer.html.twig') }}</footer>
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}

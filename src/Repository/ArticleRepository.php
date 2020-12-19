@@ -19,18 +19,33 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-    public function findAll()
+    public function findAll($page = 1)
     {
-        return $this->findBy([], ['published' => 'DESC']);
+        return $this->findBy([], ['published' => 'DESC'], 12,($page-1)*12);
     }
 
-    public function findByFollows(User $user) {
+    public function findAllCount() {
+        return count($this->findBy([]));
+    }
+
+    public function findByFollows(User $user, $page = 1) {
         return $this->createQueryBuilder('a')
             ->andWhere('a.author IN (:follows)')
             ->setParameter('follows', $user->getFollows())
             ->orderBy('a.published', 'DESC')
+            ->setMaxResults(12)
+            ->setFirstResult(($page-1)*12)
             ->getQuery()
             ->getResult()
+            ;
+    }
+
+    public function findByFollowsCount(User $user) {
+        return count($this->createQueryBuilder('a')
+            ->andWhere('a.author IN (:follows)')
+            ->setParameter('follows', $user->getFollows())
+            ->getQuery()
+            ->getResult())
             ;
     }
 

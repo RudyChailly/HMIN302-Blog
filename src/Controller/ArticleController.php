@@ -33,60 +33,56 @@ class ArticleController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        if ($this->getUser()) {
-            if(count($this->getUser()->getFollows()) > 0) {
-                return $this->redirectToRoute('article_follows');
-            }
+        if ($this->getUser() && count($this->getUser()->getFollows()) > 0) {
+            return $this->redirectToRoute('article_follows');
         }
         return $this->redirectToRoute('article_all');
     }
 
     /**
-     * @Route("/all", name="article_all", methods={"GET"})
+     * @Route("/all/{page}", name="article_all", methods={"GET"})
      */
-    public function all(Request $request): Response
+    public function all(Request $request, int $page = 1): Response
     {
         $articleRepository = $this->getDoctrine()->getRepository(Article::class);
-        $articles = $articleRepository->findAll();
+        $nbArticles = $articleRepository->findAllCount();
+        $articles = $articleRepository->findAll($page);
 
         $viewParameters = [
             'controller_name' => 'ArticleController',
             'active' => 'all',
             'backgroundColor' => 'white',
-            'articles' => $articles
+            'articles' => $articles,
+            'nbArticles' => $nbArticles,
+            'page' => $page
         ];
-        if (!$this->getUser()) {
-            $user = new User();
-            $formSignUp = $this->createForm(RegistrationType::class, $user);
-            $formSignUp->handleRequest($request);
-            $viewParameters['formSignUp'] = $formSignUp->createView();
-        }
         return $this->render('article/index.html.twig', $viewParameters);
     }
 
     /**
-     * @Route("/follows", name="article_follows", methods={"GET"})
+     * @Route("/follows/{page}", name="article_follows", methods={"GET"})
      */
-    public function follows(Request $request): Response
+    public function follows(Request $request, int $page = 1): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('article_all');
-        }
         $articleRepository = $this->getDoctrine()->getRepository(Article::class);
-        $articles = $articleRepository->findByFollows($this->getUser());
+        $nbArticles = $articleRepository->findByFollowsCount($this->getUser());
+        $articles = $articleRepository->findByFollows($this->getUser(), $page);
+
         $viewParameters = [
             'controller_name' => 'ArticleController',
             'active' => 'follows',
             'backgroundColor' => 'white',
-            'articles' => $articles
+            'articles' => $articles,
+            'nbArticles' => $nbArticles,
+            'page' => $page
         ];
         return $this->render('article/index.html.twig', $viewParameters);
     }
 
     /**
-     * @Route("/partners", name="article_partners_index", methods={"GET"})
+     * @Route("/partners/{page}", name="article_partners", methods={"GET"})
      */
-    public function partners(Request $request,HttpClientInterface $client): Response
+    public function partners(Request $request,HttpClientInterface $client, int $page = 1): Response
     {
         $response = $client->request(
             'GET',
@@ -110,7 +106,9 @@ class ArticleController extends AbstractController
             'controller_name' => 'ArticleController',
             'active' => 'partners',
             'backgroundColor' => 'white',
-            'articles' => $articles
+            'articles' => $articles,
+            'nbArticles' => count($articlesRecuperes),
+            'page' => $page
         ];
         return $this->render('article/index.html.twig', $viewParameters);
     }
@@ -150,7 +148,6 @@ class ArticleController extends AbstractController
      */
     public function new(Request $request, SluggerInterface $slugger): Response
     {
-        // TODO Nom images
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -170,7 +167,6 @@ class ArticleController extends AbstractController
                     );
                     $article->setThumbnail($newFilename);
                 } catch (FileException $e) {}
-
             }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -191,41 +187,52 @@ class ArticleController extends AbstractController
      */
     public function show(Article $article, Request $request, CommentRepository $commentRepository): Response
     {
+        $viewParameters = [
+            'controller_name' => 'ArticleController',
+            'article' => $article,
+            'backgroundColor' => 'white'
+        ];
         if ($this->getUser()) {
-            $user = $article->getAuthor();
-            $followForm = $this->createForm(UserFollowType::class, $this->getUser());
-            $followForm->handleRequest($request);
-            if ($followForm->isSubmitted() && $followForm->isValid()) {
-                if (!$this->getUser()->isFollowing($user)) {
-                    $this->getUser()->addFollow($user);
+            // Follow button
+            if ($this->getUser()->getId() != $article->getAuthor()->getId()) {
+                $user = $article->getAuthor();
+                $formFollowButton = $this->createForm(UserFollowType::class, $this->getUser());
+                $formFollowButton->handleRequest($request);
+                if ($formFollowButton->isSubmitted() && $formFollowButton->isValid()) {
+                    if (!$this->getUser()->isFollowing($user)) {
+                        $this->getUser()->addFollow($user);
+                    }
+                    else {
+                        $this->getUser()->removeFollow($user);
+                    }
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($this->getUser());
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
                 }
-                else {
-                    $this->getUser()->removeFollow($user);
+                $viewParameters['formFollowButton'] = $formFollowButton->createView();
+
+                $reportArticle = new ReportArticle();
+                $formReport = $this->createForm(ReportArticleType::class, $reportArticle);
+                $formReport->handleRequest($request);
+                if ($formReport->isSubmitted() && $formReport->isValid()) {
+                    $reportArticle->setAuthor($this->getUser());
+                    $reportArticle->setTarget($article);
+                    $reportArticle->setCreated(new \DateTime('NOW'));
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($reportArticle);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
                 }
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($this->getUser());
-                $entityManager->persist($user);
-                $entityManager->flush();
-                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
+                $viewParameters['formReport'] = $formReport->createView();
             }
 
-            $reportArticle = new ReportArticle();
-            $reportForm = $this->createForm(ReportArticleType::class, $reportArticle);
-            $reportForm->handleRequest($request);
-            if ($reportForm->isSubmitted() && $reportForm->isValid()) {
-                $reportArticle->setAuthor($this->getUser());
-                $reportArticle->setTarget($article);
-                $reportArticle->setCreated(new \DateTime('NOW'));
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($reportArticle);
-                $entityManager->flush();
-                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
-            }
-
+            // Comment form
             $comment = new Comment();
-            $formNewComment = $this->createForm(CommentType::class, $comment);
-            $formNewComment->handleRequest($request);
-            if ($formNewComment->isSubmitted() && $formNewComment->isValid()) {
+            $formComment = $this->createForm(CommentType::class, $comment);
+            $formComment->handleRequest($request);
+            if ($formComment->isSubmitted() && $formComment->isValid()) {
                 $comment->setPublished(new \DateTime('NOW'));
                 $comment->setAuthor($this->getUser());
                 $comment->setArticle($article);
@@ -234,10 +241,13 @@ class ArticleController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
+            $viewParameters['formComment'] = $formComment->createView();
+
+            // Report comment form
             $reportComment = new ReportComment();
-            $reportCommentForm = $this->createForm(ReportCommentType::class, $reportComment);
-            $reportCommentForm->handleRequest($request);
-            if ($reportCommentForm->isSubmitted() && $reportCommentForm->isValid()) {
+            $formReportComment = $this->createForm(ReportCommentType::class, $reportComment);
+            $formReportComment->handleRequest($request);
+            if ($formReportComment->isSubmitted() && $formReportComment->isValid()) {
                 $reportComment->setAuthor($this->getUser());
                 $reportComment->setTarget($commentRepository->find($reportComment->getTarget()));
                 $reportComment->setCreated(new \DateTime('NOW'));
@@ -246,19 +256,9 @@ class ArticleController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
-            return $this->render('article/show.html.twig', [
-                'article' => $article,
-                'followForm' => $followForm->createView(),
-                'formNewComment' => $formNewComment->createView(),
-                'reportForm' => $reportForm->createView(),
-                'backgroundColor' => 'white',
-                'reportCommentForm' => $reportCommentForm->createView()
-            ]);
+            $viewParameters['formReportComment'] = $formReportComment->createView();
         }
-        return $this->render('article/show.html.twig', [
-            'article' => $article,
-            'backgroundColor' => 'white'
-        ]);
+        return $this->render('article/show.html.twig', $viewParameters);
     }
 
     /**
@@ -266,39 +266,39 @@ class ArticleController extends AbstractController
      */
     public function edit(Request $request, Article $article, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        if (file_exists($article->getThumbnail())) {
-            $article->setThumbnail(new File($article->getThumbnail()));
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            $thumbnail = $form->get('thumbnail')->getData();
-            if ($thumbnail) {
-                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
-                try {
-                    $thumbnail->move(
-                        $this->getParameter('article_images_directory'),
-                        $newFilename
-                    );
-                    $article->setThumbnail($newFilename);
-                } catch (FileException $e) {}
-
+        if ($this->getUser() && ($this->getUser()->hasAccess($article->getAuthor()))) {
+            $form = $this->createForm(ArticleType::class, $article);
+            $form->handleRequest($request);
+            if (file_exists($article->getThumbnail())) {
+                $article->setThumbnail(new File($article->getThumbnail()));
             }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($article);
-            $entityManager->flush();
-            return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
-        }
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+                $thumbnail = $form->get('thumbnail')->getData();
+                if ($thumbnail) {
+                    $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
+                    try {
+                        $thumbnail->move(
+                            $this->getParameter('article_images_directory'),
+                            $newFilename
+                        );
+                        $article->setThumbnail($newFilename);
+                    } catch (FileException $e) {}
 
-        return $this->render('article/edit.html.twig', [
-            'article' => $article,
-            'formArticle' => $form->createView(),
-        ]);
+                }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($article);
+                $entityManager->flush();
+                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
+            }
+            return $this->render('article/edit.html.twig', [
+                'article' => $article,
+                'formArticle' => $form->createView(),
+            ]);
+        }
+        return $this->redirectToRoute('article_index');
     }
 
     /**
@@ -306,12 +306,13 @@ class ArticleController extends AbstractController
      */
     public function delete(Request $request, Article $article): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($article);
-            $entityManager->flush();
+        if ($this->getUser() && $this->hasAccess($article->getAuthor())) {
+            if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($article);
+                $entityManager->flush();
+            }
         }
-
         return $this->redirectToRoute('article_index');
     }
 

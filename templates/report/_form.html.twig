@@ -1,5 +1,5 @@
-{% if (reportForm is defined) and (app.user is not null)%}
-    {{ form_start(reportForm) }}
+{% if (formReport is defined) and (app.user is not null)%}
+    {{ form_start(formReport) }}
         <div class="modal fade" id="{{ modalId }}" tabindex="-1" aria-labelledby="{{ modalId }}-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -11,21 +11,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            {{ form_label(reportForm.category) }}
-                            {{ form_widget(reportForm.category, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_label(formReport.category) }}
+                            {{ form_widget(formReport.category, {'attr': {'class': 'form-control'}}) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(reportForm.description) }}
-                            {{ form_widget(reportForm.description, {'attr': {'class': 'form-control', 'rows':4}}) }}
+                            {{ form_label(formReport.description) }}
+                            {{ form_widget(formReport.description, {'attr': {'class': 'form-control', 'rows':4}}) }}
                         </div>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn-pill btn-outline-grey" data-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn-pill btn-danger">{{ button_label|default('Signaler') }}</button>
+                        <button type="submit" class="btn-pill btn-danger">Signaler</button>
                     </div>
                 </div>
             </div>
         </div>
-    {{ form_end(reportForm) }}
+    {{ form_end(formReport) }}
 {% endif %}

@@ -9,7 +9,7 @@
     <div class="col-11 pl-0 ">
         <div class="bg-white h-100 border border-left-0  py-3">
             <div class="d-flex flex-row my-auto justify-content-between">
-                <a href="{{ path('user_show', {'username': comment.author.username}) }}" class="mr-3"> {{ comment.author.username}} </a>
+                <a href="{{ path('user_show', {'username': comment.author.username}) }}" class="mr-3 text-decoration-none"> {{ comment.author.username}} </a>
                 <div class="d-inline-flex">
                     <div class="comment-date my-auto mr-1 {% if not app.user %}pr-3{% endif %}">
                         <span> {{ comment.published|date("d/m/Y | H:i") }} </span>
@@ -35,7 +35,7 @@
                                     </span>
                                 </button>
                                 {% endif %}
-                                {% if (comment.author.id==app.user.id or app.user.isAdmin())%}
+                                {% if (app.user.hasAccess(comment.author))%}
                                     {{ include('comment/_delete_form.html.twig') }}
                                 {% endif %}
                             </div>

@@ -45,7 +45,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"get"})
      */
     private $email;
 
@@ -311,6 +310,10 @@ class User implements UserInterface
 
     public function isAdmin() {
         return (in_array("ROLE_SUPER_ADMIN", $this->getRoles()) || in_array("ROLE_ADMIN", $this->getRoles()));
+    }
+
+    public function isSuperAdmin() {
+        return (in_array("ROLE_SUPER_ADMIN", $this->getRoles()));
     }
 
     public function hasAccess(self $utilisateur) {

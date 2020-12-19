@@ -1,4 +1,5 @@
 <div class="bg-white border p-3">
+    {% if reportedComments|length > 0 %}
     <table class="table table-sm table-hover mb-0">
         <thead>
         <tr>
@@ -13,11 +14,15 @@
         <tbody>
         {% for report in reportedComments %}
             <tr class="table-hover-text-primary">
-                <td> {{ report.target.content|slice(0,20) }}{% if report.target.content|length > 20 %}...{% endif %}</td>
+                <td>
+                    <a class="text-decoration-none" href="{{ path('article_show', {'urlAlias': report.target.article.urlAlias}) }}#comment-{{ report.target.id }}">
+                        {{ report.target.content|slice(0,20) }}{% if report.target.content|length > 20 %}...{% endif %}
+                    </a>
+                </td>
                 <td> {{ report.category }}</td>
                 <td class="text-break"> {{ report.description }}</td>
-                <td> {{ report.author.username }}</td>
-                <td> {{ report.created|date("d/m/y | H:i") }}</td>
+                <td> <a class="text-decoration-none" href="{{ path('user_show', {'username': report.author.username}) }}">  {{ report.author.username }} </a> </td>
+                <td> {{ report.created|date("d/m/y à H:i") }}</td>
                 <td class="d-flex justify-content-center">
                     {{ include('comment/_delete_icon_check.html.twig', {'comment': report.target}) }}
                     {{ include('report/_delete_icon_x.html.twig', {'reportElement': 'comment', 'reportId': report.id}) }}
@@ -26,4 +31,7 @@
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <div class="alert alert-dark w-100 my-0"> Aucun comentaire n'a été signalé. </div>
+    {% endif %}
 </div>

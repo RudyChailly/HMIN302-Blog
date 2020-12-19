@@ -6,11 +6,7 @@
             <div class="card">
                 <div class="card-header" id="headingArticle">
                     <h2 class="mb-0">
-                        <button class="btn btn-link btn-block text-left text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseArticle" aria-expanded="false" aria-controls="collapseArticle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-newspaper" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12z"/>
-                                <path d="M2 3h10v2H2V3zm0 3h4v3H2V6zm0 4h4v1H2v-1zm0 2h4v1H2v-1zm5-6h2v1H7V6zm3 0h2v1h-2V6zM7 8h2v1H7V8zm3 0h2v1h-2V8zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1z"/>
-                            </svg>
+                        <button class="px-0 font-weight-bold btn btn-link btn-block text-left text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseArticle" aria-expanded="false" aria-controls="collapseArticle">
                             <span class="pl-3">
                                 Articles
                             </span>
@@ -20,17 +16,14 @@
 
                 <div id="collapseArticle" class="collapse" aria-labelledby="headingArticle" data-parent="#accordionReport">
                     <div class="card-body border-0 p-0">
-                        {{ include('admin/reportTables/article.html.twig') }}
+                        {{ include('admin/reports_tables/article.html.twig') }}
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-header" id="headingUser">
                     <h2 class="mb-0 ">
-                        <button class="btn btn-link btn-block text-left collapsed text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                            </svg>
+                        <button class="px-0 font-weight-bold btn btn-link btn-block text-left collapsed text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
                             <span class="pl-3">
                                 Utilisateurs
                             </span>
@@ -39,17 +32,14 @@
                 </div>
                 <div id="collapseUser" class="collapse" aria-labelledby="headingUser" data-parent="#accordionReport">
                     <div class="card-body border-0 p-0">
-                        {{ include('admin/reportTables/user.html.twig') }}
+                        {{ include('admin/reports_tables/user.html.twig') }}
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-header" id="headingComment">
                     <h2 class="mb-0">
-                        <button class="btn btn-link btn-block text-left collapsed text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
-                            </svg>
+                        <button class="px-0 font-weight-bold btn btn-link btn-block text-left collapsed text-secondary text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
                             <span class="pl-3">
                                 Commentaires
                             </span>
@@ -59,7 +49,7 @@
                 </div>
                 <div id="collapseComment" class="collapse" aria-labelledby="headingComment" data-parent="#accordionReport">
                     <div class="card-body border-0 p-0">
-                        {{ include('admin/reportTables/comment.html.twig') }}
+                        {{ include('admin/reports_tables/comment.html.twig') }}
                     </div>
                 </div>
             </div>

@@ -15,26 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReportUserController extends AbstractController
 {
     /**
-     * @Route("/", name="report_user_index", methods={"GET"})
-     */
-    public function index(ReportUserRepository $reportUserRepository): Response
-    {
-        return $this->render('report/user/articles.html.twig', [
-            'report_users' => $reportUserRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="report_user_show", methods={"GET"})
-     */
-    public function show(ReportUser $reportUser): Response
-    {
-        return $this->render('Report/user/show.html.twig', [
-            'Report' => $reportUser,
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="report_user_delete", methods={"DELETE"})
      */
     public function delete(Request $request, ReportUser $reportUser): Response

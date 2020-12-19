@@ -18,7 +18,7 @@
 
 
     <div class="bg-white pt-3">
-        <div class="container">
+        <div class="container px-0">
                 <div>
             {{ include('article/nav.html.twig') }}
             <div class="card-group bg-white">
@@ -37,6 +37,9 @@
             {% endfor %}
             </div>
                 </div>
+            {% if nbArticles > 12 %}
+                {{ include('article/pagination.html.twig') }}
+            {% endif %}
         </div>
     </div>
     </div>

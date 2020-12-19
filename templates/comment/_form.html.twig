@@ -1,10 +1,10 @@
-{% if app.user and formNewComment is defined %}
-{{ form_start(formNewComment, {'attr': {'class': 'mb-4'}}) }}
+{% if app.user and formComment is defined %}
+{{ form_start(formComment, {'attr': {'class': 'mb-4'}}) }}
     <div class="form-group">
-        {{ form_widget(formNewComment.content, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(formComment.content, {'attr': {'class': 'form-control'}}) }}
     </div>
     <div class="d-flex flex-row-reverse">
         <button class=" btn-pill btn-primary">{{ button_label|default('Ajouter un commentaire') }}</button>
     </div>
-{{ form_end(formNewComment) }}
+{{ form_end(formComment) }}
 {% endif %}

@@ -1,30 +1,30 @@
-<div class="d-flex text-center font-weight-bold bg-white">
+<div class="d-flex text-center font-weight-bold bg-white font-size-11">
     {% if app.user %}
         {% if active == 'articles' %}
-            <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+            <div class="nav-link text-primary pl-0">
                 Articles
             </div>
         {% else %}
-            <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_articles') }}">
+            <a class="text-decoration-none nav-link text-grey text-hover-primary pl-0" href="{{ path('admin_articles') }}">
                 Articles
             </a>
         {% endif %}
     {% endif %}
     {% if active == 'users'  %}
-        <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+        <div class="nav-link text-primary">
             Utilisateurs
         </div>
     {% else %}
-        <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_users') }}">
+        <a class="text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_users') }}">
             Utilisateurs
         </a>
     {% endif %}
     {% if active == 'reports' %}
-        <div class="col border-primary border-bottom-width-2 nav-link text-primary">
+        <div class="nav-link text-primary">
             Signalements
         </div>
     {% else %}
-        <a class="col border-bottom text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_reports') }}">
+        <a class="text-decoration-none nav-link text-grey text-hover-primary " href="{{ path('admin_reports') }}">
             Signalements
         </a>
     {% endif %}
