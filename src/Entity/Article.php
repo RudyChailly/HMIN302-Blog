@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -32,6 +33,15 @@ class Article
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"get"})
+     * @Assert\NotBlank(
+     *   message = "Le titre de l'article ne peut être nul."
+     * )
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Le titre de l'article est trop court (5 caractères minimum).",
+     *      maxMessage = "Le titre de l'article est trop long (50 caractères maximum)."
+     * )
      */
     private $title;
 
@@ -44,6 +54,15 @@ class Article
     /**
      * @ORM\Column(type="text")
      * @Groups({"get"})
+     * @Assert\NotBlank(
+     *   message = "Le contenu de l'article ne peut être nul."
+     * )
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 2000,
+     *      minMessage = "Le contenu de l'article est trop court (5 caractères minimum).",
+     *      maxMessage = "Le contenu de l'article est trop long (2000 caractères maximum)."
+     * )
      */
     private $content;
 

@@ -1,7 +1,14 @@
 {{ form_start(formArticle) }}
     <div class="form-group">
         {{ form_label(formArticle.title) }}
-        {{ form_widget(formArticle.title, {'attr': {'class': 'form-control'}}) }}
+        {% if errorsProperties is defined and 'title' in errorsProperties %}
+            {{ form_widget(formArticle.title, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-title'}}) }}
+            <div id="validation-title" class="invalid-feedback">
+                {{ form_errors(formArticle.title) }}
+            </div>
+        {% else %}
+            {{ form_widget(formArticle.title, {'attr': {'class': 'form-control'}}) }}
+        {% endif %}
     </div>
     <div class="row">
         <div class="form-group col">
@@ -15,7 +22,14 @@
     </div>
     <div class="form-group">
         {{ form_label(formArticle.content) }}
-        {{ form_widget(formArticle.content, {'attr': {'class': 'form-control'}}) }}
+        {% if errorsProperties is defined and 'content' in errorsProperties %}
+            {{ form_widget(formArticle.content, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-content'}}) }}
+            <div id="validation-content" class="invalid-feedback">
+                {{ form_errors(formArticle.content) }}
+            </div>
+        {% else %}
+            {{ form_widget(formArticle.content, {'attr': {'class': 'form-control'}}) }}
+        {% endif %}
     </div>
     <div class="d-flex justify-content-end">
         <a class="btn-pill btn-outline-grey mr-2" href="{{ path('article_index') }}"> Annuler </a>

@@ -1,16 +1,43 @@
 {{ form_start(formUser) }}
     <div class="form-group">
         {{ form_label(formUser.username) }}
-        {{ form_widget(formUser.username, {'attr': {'class': 'form-control'}}) }}
+        {% if (errorsProperties is defined and 'username' in errorsProperties) or (usernameExists is defined and usernameExists) %}
+            {{ form_widget(formUser.username, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-username'}}) }}
+            <div id="validation-username" class="invalid-feedback">
+                {% if usernameExists %}
+                    <div> Ce pseudo est déjà pris par un autre utilisateur. </div>
+                {% endif %}
+                {{ form_errors(formUser.username) }}
+            </div>
+        {% else %}
+            {{ form_widget(formUser.username, {'attr': {'class': 'form-control'}}) }}
+        {% endif %}
     </div>
     <div class="form-group">
         {{ form_label(formUser.email) }}
-        {{ form_widget(formUser.email, {'attr': {'class': 'form-control'}}) }}
+        {% if (errorsProperties is defined and 'email' in errorsProperties) or (emailExists is defined and emailExists) %}
+            {{ form_widget(formUser.email, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-email'}}) }}
+            <div id="validation-email" class="invalid-feedback">
+                {% if emailExists %}
+                    <div> Cette adresse mail est déjà prise par un autre utilisateur. </div>
+                {% endif %}
+                {{ form_errors(formUser.email) }}
+            </div>
+        {% else %}
+            {{ form_widget(formUser.email, {'attr': {'class': 'form-control'}}) }}
+        {% endif %}
     </div>
     {% if formUser.password is defined %}
         <div class="form-group">
             {{ form_label(formUser.password.first) }}
-            {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control'}}) }}
+            {% if (errorsProperties is defined and 'password' in errorsProperties) %}
+                {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-password'}}) }}
+                <div id="validation-password" class="invalid-feedback">
+                </div>
+            {% else %}
+                {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control'}}) }}
+            {% endif %}
+            {{ form_errors(formUser.password) }}
         </div>
         <div class="form-group">
             {{ form_label(formUser.password.second) }}

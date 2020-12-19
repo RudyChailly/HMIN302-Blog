@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a63e6caedcd7644f1ac524ae59c659f",
+    "content-hash": "ce7c7b29233dec540fb5d8db9bc1dedd",
     "packages": [
         {
             "name": "api-platform/core",
@@ -6972,16 +6972,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v5.1.9",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "acf84937b932fe575e4e4892eecee5a6c5ca8b78"
+                "reference": "2100049d3fb13c65272ca278127083a2d2c89231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/acf84937b932fe575e4e4892eecee5a6c5ca8b78",
-                "reference": "acf84937b932fe575e4e4892eecee5a6c5ca8b78",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/2100049d3fb13c65272ca278127083a2d2c89231",
+                "reference": "2100049d3fb13c65272ca278127083a2d2c89231",
                 "shasum": ""
             },
             "require": {
@@ -7073,7 +7073,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-28T10:57:20+00:00"
+            "time": "2020-12-18T07:32:24+00:00"
         },
         {
             "name": "symfony/var-dumper",

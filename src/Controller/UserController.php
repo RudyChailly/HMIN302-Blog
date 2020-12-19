@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/user")
@@ -27,25 +28,49 @@ class UserController extends AbstractController
     /**
      * @Route("/register", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator, UserRepository $userRepository): Response
     {
         $user = new User();
         $formUser = $this->createForm(RegistrationType::class, $user);
         $formUser->handleRequest($request);
 
-        if ($formUser->isSubmitted() && $formUser->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $hash = $encoder->encodePassword($user,$user->getPassword());
-            $user->setPassword($hash);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_login');
+        $viewParameters = [
+            'user' => $user,
+            'formUser' => $formUser->createView()
+        ];
+
+        if ($formUser->isSubmitted()) {
+            if ($formUser->isValid()) {
+                if ($userRepository->usernameExist($user->getUsername())) {
+                    $viewParameters['usernameExists'] = true;
+                }
+                else {
+                    if ($userRepository->emailExist($user->getEmail())) {
+                        $viewParameters['emailExists'] = true;
+                    }
+                    else {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $hash = $encoder->encodePassword($user,$user->getPassword());
+                        $user->setPassword($hash);
+                        $entityManager->persist($user);
+                        $entityManager->flush();
+                        return $this->redirectToRoute('app_login');
+                    }
+                }
+            }
+
+            $errorsProperties = [];
+            $errors = $validator->validate($user);
+            foreach ($errors as $error) {
+                if (!in_array($error->getPropertyPath(), $errorsProperties)) {
+                    array_push($errorsProperties, $error->getPropertyPath());
+                }
+            }
+            $viewParameters['errors'] = $errors;
+            $viewParameters['errorsProperties'] = $errorsProperties;
         }
 
-        return $this->render('user/register.html.twig', [
-            'user' => $user,
-            'formUser' => $formUser->createView(),
-        ]);
+        return $this->render('user/register.html.twig', $viewParameters);
     }
 
     /**

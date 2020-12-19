@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/article")
@@ -82,7 +83,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/partners/{page}", name="article_partners", methods={"GET"})
      */
-    public function partners(Request $request,HttpClientInterface $client, int $page = 1): Response
+    public function partners(Request $request, HttpClientInterface $client, int $page = 1): Response
     {
         $response = $client->request(
             'GET',
@@ -116,7 +117,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/partners/{id}", name="article_partners_show", methods={"GET"})
      */
-    public function partners_show(Request $request,HttpClientInterface $client, int $id): Response
+    public function partners_show(Request $request, HttpClientInterface $client, int $id): Response
     {
         $viewParameters = [
             'controller_name' => 'ArticleController'
@@ -146,40 +147,54 @@ class ArticleController extends AbstractController
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
      */
-    public function new(Request $request, SluggerInterface $slugger): Response
+    public function new(Request $request, SluggerInterface $slugger, ValidatorInterface $validator): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article->setPublished(new \DateTime('NOW'));
-            $article->setAuthor($this->getUser());
-            $thumbnail = $form->get('thumbnail')->getData();
-            if ($thumbnail) {
-                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
-                try {
-                    $thumbnail->move(
-                        $this->getParameter('article_images_directory'),
-                        $newFilename
-                    );
-                    $article->setThumbnail($newFilename);
-                } catch (FileException $e) {}
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($article);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('article_index');
-        }
-
-        return $this->render('article/new.html.twig', [
+        $errors = $validator->validate($article);
+        $viewParameters = [
             'article' => $article,
             'formArticle' => $form->createView(),
-        ]);
+            'errors' => $errors
+        ];
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $article->setPublished(new \DateTime('NOW'));
+                $article->setAuthor($this->getUser());
+                $thumbnail = $form->get('thumbnail')->getData();
+                if ($thumbnail) {
+                    $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $thumbnail->guessExtension();
+                    try {
+                        $thumbnail->move(
+                            $this->getParameter('article_images_directory'),
+                            $newFilename
+                        );
+                        $article->setThumbnail($newFilename);
+                    } catch (FileException $e) {
+                    }
+                }
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($article);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('article_index');
+            }
+            else {
+                $errorsProperties = [];
+                foreach ($errors as $error) {
+                    if (!in_array($error->getPropertyPath(), $errorsProperties)) {
+                        array_push($errorsProperties, $error->getPropertyPath());
+                    }
+                }
+                $viewParameters['errorsProperties'] = $errorsProperties;
+            }
+        }
+        return $this->render('article/new.html.twig', $viewParameters);
     }
 
     /**
@@ -201,8 +216,7 @@ class ArticleController extends AbstractController
                 if ($formFollowButton->isSubmitted() && $formFollowButton->isValid()) {
                     if (!$this->getUser()->isFollowing($user)) {
                         $this->getUser()->addFollow($user);
-                    }
-                    else {
+                    } else {
                         $this->getUser()->removeFollow($user);
                     }
                     $entityManager = $this->getDoctrine()->getManager();
@@ -264,39 +278,43 @@ class ArticleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Article $article, SluggerInterface $slugger): Response
+    public function edit(Request $request, Article $article, SluggerInterface $slugger, ValidatorInterface $validator): Response
     {
         if ($this->getUser() && ($this->getUser()->hasAccess($article->getAuthor()))) {
             $form = $this->createForm(ArticleType::class, $article);
             $form->handleRequest($request);
+            $errors = $validator->validate($article);
+            $viewParameters = [
+                'article' => $article,
+                'formArticle' => $form->createView(),
+                'errors' => $errors
+            ];
             if (file_exists($article->getThumbnail())) {
                 $article->setThumbnail(new File($article->getThumbnail()));
             }
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
-                $thumbnail = $form->get('thumbnail')->getData();
-                if ($thumbnail) {
-                    $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$thumbnail->guessExtension();
-                    try {
-                        $thumbnail->move(
-                            $this->getParameter('article_images_directory'),
-                            $newFilename
-                        );
-                        $article->setThumbnail($newFilename);
-                    } catch (FileException $e) {}
-
+            if ($form->isSubmitted()) {
+                if ($form->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
+                    $thumbnail = $form->get('thumbnail')->getData();
+                    if ($thumbnail) {
+                        $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                        $safeFilename = $slugger->slug($originalFilename);
+                        $newFilename = $safeFilename . '-' . uniqid() . '.' . $thumbnail->guessExtension();
+                        try {
+                            $thumbnail->move(
+                                $this->getParameter('article_images_directory'),
+                                $newFilename
+                            );
+                            $article->setThumbnail($newFilename);
+                        } catch (FileException $e) {}
+                    }
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($article);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
                 }
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($article);
-                $entityManager->flush();
-                return $this->redirectToRoute('article_show', ['urlAlias' => $article->getUrlAlias()]);
             }
-            return $this->render('article/edit.html.twig', [
-                'article' => $article,
-                'formArticle' => $form->createView(),
-            ]);
+            return $this->render('article/edit.html.twig', $viewParameters);
         }
         return $this->redirectToRoute('article_index');
     }
@@ -307,7 +325,7 @@ class ArticleController extends AbstractController
     public function delete(Request $request, Article $article): Response
     {
         if ($this->getUser() && $this->hasAccess($article->getAuthor())) {
-            if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+            if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($article);
                 $entityManager->flush();
