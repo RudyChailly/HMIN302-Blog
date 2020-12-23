@@ -21,6 +21,9 @@
         <div class="container px-0">
                 <div>
             {{ include('article/nav.html.twig') }}
+                    {% if categories is defined %}
+                        {{ include('article/categories.html.twig') }}
+                    {% endif %}
             <div class="card-group bg-white">
             {% for article in articles %}
                 {{ include('article/preview.html.twig', {'article': article}) }}

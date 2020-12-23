@@ -28,6 +28,14 @@ class ArticleRepository extends ServiceEntityRepository
         return count($this->findBy([]));
     }
 
+    public function findCategory($category, $page = 1) {
+        return $this->findBy(['category' => $category], ['published' => 'DESC'], 12,($page-1)*12);
+    }
+
+    public function findCategoryCount($category) {
+        return count($this->findBy(['category' => $category]));
+    }
+
     public function findByFollows(User $user, $page = 1) {
         return $this->createQueryBuilder('a')
             ->andWhere('a.author IN (:follows)')

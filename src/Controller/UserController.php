@@ -39,35 +39,19 @@ class UserController extends AbstractController
             'formUser' => $formUser->createView()
         ];
 
-        if ($formUser->isSubmitted()) {
-            if ($formUser->isValid()) {
-                if ($userRepository->usernameExist($user->getUsername())) {
-                    $viewParameters['usernameExists'] = true;
-                }
-                else {
-                    if ($userRepository->emailExist($user->getEmail())) {
-                        $viewParameters['emailExists'] = true;
-                    }
-                    else {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $hash = $encoder->encodePassword($user,$user->getPassword());
-                        $user->setPassword($hash);
-                        $entityManager->persist($user);
-                        $entityManager->flush();
-                        return $this->redirectToRoute('app_login');
-                    }
-                }
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
+            if ($userRepository->usernameExist($user->getUsername())) {
+                $viewParameters['usernameExists'] = true;
+            } elseif ($userRepository->emailExist($user->getEmail())) {
+                $viewParameters['emailExists'] = true;
+            } else {
+                $entityManager = $this->getDoctrine()->getManager();
+                $hash = $encoder->encodePassword($user, $user->getPassword());
+                $user->setPassword($hash);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_login');
             }
-
-            $errorsProperties = [];
-            $errors = $validator->validate($user);
-            foreach ($errors as $error) {
-                if (!in_array($error->getPropertyPath(), $errorsProperties)) {
-                    array_push($errorsProperties, $error->getPropertyPath());
-                }
-            }
-            $viewParameters['errors'] = $errors;
-            $viewParameters['errorsProperties'] = $errorsProperties;
         }
 
         return $this->render('user/register.html.twig', $viewParameters);
@@ -76,7 +60,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{username}", name="user_show", methods={"GET", "POST"})
      */
-    public function show(User $user, Request $request,ArticleRepository $articleRepository): Response
+    public function show(User $user, Request $request, ArticleRepository $articleRepository): Response
     {
         $articles = $articleRepository->findBy(['author' => $user->getId()], ['published' => 'DESC']);
         $viewParameters = [
@@ -123,11 +107,15 @@ class UserController extends AbstractController
     /**
      * @Route("/{username}/edit", name="user_edit", methods={"GET","POST", "DELETE"})
      */
-    public function edit(Request $request, User $user, SluggerInterface $slugger): Response
+    public function edit(Request $request, User $user, SluggerInterface $slugger, UserRepository $userRepository): Response
     {
         if ($this->getUser() && $this->getUser()->hasAccess($user)) {
             $formUser = $this->createForm(UserEditType::class, $user);
             $formUser->handleRequest($request);
+            $viewParameters = [
+                'user' => $user,
+                'formUser' => $formUser->createView()
+            ];
             if (file_exists($user->getProfilePicture())) {
                 $user->setProfilePicture(new File($user->getProfilePicture()));
             }
@@ -136,39 +124,41 @@ class UserController extends AbstractController
             }
 
             if ($formUser->isSubmitted() && $formUser->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                /*if ($userRepository->usernameExist($user->getUsername())) {
+                    $viewParameters['usernameExists'] = true;
+                } elseif ($userRepository->emailExist($user->getEmail())) {
+                    $viewParameters['emailExists'] = true;
+                } else {*/
 
-                $profilePicture = $formUser->get('profile_picture')->getData();
-                if ($profilePicture) {
-                    $profilePictureName = $slugger->slug($user->getUsername()) . "-profile." . $profilePicture->guessExtension();
-                    try {
-                        $profilePicture->move($this->getParameter('user_images_directory'), $profilePictureName);
-                        $user->setProfilePicture($profilePictureName);
-                    } catch (FileException $e) {
+                    $profilePicture = $formUser->get('profile_picture')->getData();
+                    if ($profilePicture) {
+                        $profilePictureName = $slugger->slug($user->getUsername()) . "-profile." . $profilePicture->guessExtension();
+                        try {
+                            $profilePicture->move($this->getParameter('user_images_directory'), $profilePictureName);
+                            $user->setProfilePicture($profilePictureName);
+                        } catch (FileException $e) {
+                        }
                     }
-                }
 
-                $coverPicture = $formUser->get('cover_picture')->getData();
-                if ($coverPicture) {
-                    $coverPictureName = $slugger->slug($user->getUsername()) . "-cover." . $coverPicture->guessExtension();
-                    try {
-                        $coverPicture->move($this->getParameter('user_images_directory'), $coverPictureName);
-                        $user->setCoverPicture($coverPictureName);
-                    } catch (FileException $e) {
+                    $coverPicture = $formUser->get('cover_picture')->getData();
+                    if ($coverPicture) {
+                        $coverPictureName = $slugger->slug($user->getUsername()) . "-cover." . $coverPicture->guessExtension();
+                        try {
+                            $coverPicture->move($this->getParameter('user_images_directory'), $coverPictureName);
+                            $user->setCoverPicture($coverPictureName);
+                        } catch (FileException $e) {
+                        }
                     }
+
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
                 }
+           /* }*/
 
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
-            }
-
-            return $this->render('user/edit.html.twig', [
-                'user' => $user,
-                'formUser' => $formUser->createView(),
-            ]);
+            return $this->render('user/edit.html.twig', $viewParameters);
         }
         return $this->redirectToRoute('user_show', ['username' => $user->getUsername()]);
     }

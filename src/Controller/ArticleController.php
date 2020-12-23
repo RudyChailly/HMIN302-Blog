@@ -13,6 +13,7 @@ use App\Form\Report\ReportArticleType;
 use App\Form\Report\ReportCommentType;
 use App\Form\User\RegistrationType;
 use App\Form\User\UserFollowType;
+use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,16 +44,42 @@ class ArticleController extends AbstractController
     /**
      * @Route("/all/{page}", name="article_all", methods={"GET"})
      */
-    public function all(Request $request, int $page = 1): Response
+    public function all(Request $request, CategoryRepository $categoryRepository, int $page = 1): Response
     {
         $articleRepository = $this->getDoctrine()->getRepository(Article::class);
         $nbArticles = $articleRepository->findAllCount();
         $articles = $articleRepository->findAll($page);
+        $categories = $categoryRepository->findBy([], ['name' => 'ASC']);
 
         $viewParameters = [
             'controller_name' => 'ArticleController',
             'active' => 'all',
             'backgroundColor' => 'white',
+            'categories' => $categories,
+            'categoryActive' => 'all',
+            'articles' => $articles,
+            'nbArticles' => $nbArticles,
+            'page' => $page
+        ];
+        return $this->render('article/index.html.twig', $viewParameters);
+    }
+
+    /**
+     * @Route("/category/{category}/{page}", name="article_category", methods={"GET"})
+     */
+    public function category(Request $request, int $category, int $page = 1, CategoryRepository $categoryRepository): Response
+    {
+        $articleRepository = $this->getDoctrine()->getRepository(Article::class);
+        $nbArticles = $articleRepository->findCategoryCount($category);
+        $articles = $articleRepository->findCategory($category, $page);
+        $categories = $categoryRepository->findBy([], ['name' => 'ASC']);
+
+        $viewParameters = [
+            'controller_name' => 'ArticleController',
+            'active' => 'all',
+            'backgroundColor' => 'white',
+            'categories' => $categories,
+            'categoryActive' => $category,
             'articles' => $articles,
             'nbArticles' => $nbArticles,
             'page' => $page

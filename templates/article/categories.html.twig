@@ -1,0 +1,14 @@
+<div class="d-flex px-3 my-2">
+    {% if categoryActive == 'all' %}
+        <div class="bg-secondary text-white btn-pill py-1 px-2 mr-2"> Toutes les catégories </div>
+    {% else %}
+        <a href="{{ path('article_all')}}" class="btn-outline-secondary btn-pill py-1 px-2 mr-2"> Toutes les catégories </a>
+    {% endif %}
+{% for category in categories %}
+    {% if categoryActive == category.id %}
+        <div class="bg-secondary text-white btn-pill py-1 px-2 mr-2"> {{ category.name }} </div>
+    {% else %}
+        <a href="{{ path('article_category', {'category': category.id}) }}" class="btn-outline-secondary btn-pill py-1 px-2 mr-2"> {{ category.name }} </a>
+    {% endif %}
+{% endfor %}
+</div>

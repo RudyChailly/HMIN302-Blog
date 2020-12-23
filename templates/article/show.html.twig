@@ -26,7 +26,7 @@
         <div class="col-3">
             <div class="shadow">
             <div class="text-center bg-white border p-3">
-                {% if article.category is not null %}<a href="#" class="text-decoration-none"> {{ article.category.name}}  </a> {% endif %}
+                {% if article.category is not null %}<a href="{{ path('article_category', {'category': article.category.id}) }}" class="text-decoration-none"> {{ article.category.name}}  </a> {% endif %}
                     <div> {{ article.published|date("d/m/Y | H:i") }} </div>
             </div>
             {% if article.author is not null %}
