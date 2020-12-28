@@ -1,3 +1,10 @@
+@media screen and (max-width: 576px) {
+  .article-show-thumbnail {
+    height: 200px !important;
+  }
+}
+
+
 .article-preview {
   text-decoration: none;
   color: $black !important;
@@ -25,7 +32,7 @@
 
 .article-show-thumbnail {
   width: 100% !important;
-  height: 400px !important;
+  height: 400px;
   object-fit: cover;
 }
 

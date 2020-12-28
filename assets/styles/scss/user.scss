@@ -15,6 +15,29 @@
   border-radius: 50% !important;
 }
 
+@media screen and (max-width: 768px) {
+  .user-show-profile-picture {
+    left: 0px !important;
+    margin: auto;
+  }
+
+  .user-show {
+    padding: 0 !important;
+  }
+
+  .user-show-infos {
+    margin-left: 0px !important;
+    margin-top: 0px;
+    position: relative;
+    top: -100px;
+  }
+
+  .user-show-articles {
+    position: relative;
+    top: -90px;
+  }
+}
+
 .user-show-profile-picture {
   width: 200px !important;
   height: 200px;
@@ -27,7 +50,7 @@
 }
 
 .user-show-infos {
-  margin-left: 25px !important;
+  margin-left: 25px;
   margin-top: 10px;
 }
 

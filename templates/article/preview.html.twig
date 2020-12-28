@@ -1,4 +1,4 @@
-<div class="col-4 py-3 article-preview"
+<div class="col-sm-6 col-lg-4 py-3 article-preview"
         {% if article.urlAlias is not null %}
             onclick="location.href='{{ path('article_show', {'urlAlias': article.urlAlias}) }}'"
         {% else %}

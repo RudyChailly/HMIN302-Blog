@@ -1,12 +1,12 @@
 <div id="comment-{{ comment.id }}" class="row my-3">
-    <div class="col-1 pr-0">
+    <div class="col-3 col-sm-2 col-lg-1 pr-0">
         <div class="bg-white d-flex h-100 border border-right-0 py-3 justify-content-center">
             <a href="{{ path('user_show', {'username': comment.author.username}) }}">
                 <img class="comment-user-profile-picture " src="{{ asset('uploads/user/' ~ comment.author.profilePicture ) }}" alt="..."/>
             </a>
         </div>
     </div>
-    <div class="col-11 pl-0 ">
+    <div class="col-9 col-sm-10 col-lg-11 pl-0 ">
         <div class="bg-white h-100 border border-left-0  py-3">
             <div class="d-flex flex-row my-auto justify-content-between">
                 <a href="{{ path('user_show', {'username': comment.author.username}) }}" class="mr-3 text-decoration-none"> {{ comment.author.username}} </a>
