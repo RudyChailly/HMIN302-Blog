@@ -53,7 +53,6 @@ class User implements UserInterface
      * @Assert\Length(
      *      min = 8,git
      *      minMessage = "Le mot de passe est trop court (8 caractères minimum).",
-     *      maxMessage = "Le mot de passe est trop long (25 caractères maximum)."
      * )
      */
     private $password;
