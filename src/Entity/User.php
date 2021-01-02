@@ -52,7 +52,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * @Assert\Length(
      *      min = 8,
-     *      max = 25,
      *      minMessage = "Le mot de passe est trop court (8 caractères minimum).",
      *      maxMessage = "Le mot de passe est trop long (25 caractères maximum)."
      * )
