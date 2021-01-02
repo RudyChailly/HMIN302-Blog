@@ -51,7 +51,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\Length(
-     *      min = 8,
+     *      min = 8,git
      *      minMessage = "Le mot de passe est trop court (8 caractères minimum).",
      *      maxMessage = "Le mot de passe est trop long (25 caractères maximum)."
      * )
