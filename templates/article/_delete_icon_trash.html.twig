@@ -1,4 +1,5 @@
-<form class="d-flex justify-content-end" method="post" action="{{ path('article_delete', {'id': article.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer l\'article?');">
+<form class="d-flex justify-content-end" method="post" action="{{ path('article_delete', {'id': article.id}) }}"
+      onsubmit="return confirm('Supprimer l\'article {{ article.title}} ?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
     <button class="btn text-danger pt-0" data-toggle="tooltip" data-placement="top" title="Supprimer l'article">

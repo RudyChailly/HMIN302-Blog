@@ -142,12 +142,13 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/partners/{id}", name="article_partners_show", methods={"GET"})
+     * @Route("/partners/show/{id}", name="article_partners_show", methods={"GET"})
      */
     public function partners_show(Request $request, HttpClientInterface $client, int $id): Response
     {
         $viewParameters = [
-            'controller_name' => 'ArticleController'
+            'controller_name' => 'ArticleController',
+            'backgroundColor' => 'white'
         ];
         $response = $client->request(
             'GET',
@@ -225,7 +226,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/{urlAlias}", name="article_show", methods={"GET", "POST"})
+     * @Route("/show/{urlAlias}", name="article_show", methods={"GET", "POST"})
      */
     public function show(Article $article, Request $request, CommentRepository $commentRepository): Response
     {

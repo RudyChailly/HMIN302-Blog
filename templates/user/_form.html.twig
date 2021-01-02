@@ -30,9 +30,10 @@
     {% if formUser.password is defined %}
         <div class="form-group">
             {{ form_label(formUser.password.first) }}
-            {% if (errorsProperties is defined and 'password' in errorsProperties) %}
+            {% if formUser.password.first.vars.errors|length %}
                 {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control is-invalid', 'aria-describedby': 'validation-password'}}) }}
                 <div id="validation-password" class="invalid-feedback">
+                    {{ form_errors(formUser.password.first) }}
                 </div>
             {% else %}
                 {{ form_widget(formUser.password.first, {'attr': {'class': 'form-control'}}) }}

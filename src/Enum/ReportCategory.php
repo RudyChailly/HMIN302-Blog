@@ -8,8 +8,12 @@ abstract class ReportCategory
 {
 
     private static $categories = [
-        'Racism',
-        'Sexual'
+        'Apologie de comportements illégaux',
+        'Contenu à caractère sexuel',
+        'Discrimination',
+        'Propos haineux',
+        'Utilisation de données personnelles',
+        'Autre'
     ];
 
     public static function getCategories() {

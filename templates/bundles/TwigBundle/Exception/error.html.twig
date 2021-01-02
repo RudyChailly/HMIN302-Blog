@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Erreur {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="alert alert-danger mt-3" role="alert">
+            {% block message %} Erreur {{ status_code }} : {{status_text}}{% endblock %}
+        </div>
+
+    </div>
+
+{% endblock %}
