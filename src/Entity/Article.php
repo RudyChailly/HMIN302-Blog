@@ -38,7 +38,7 @@ class Article
      * )
      * @Assert\Length(
      *      min = 5,
-     *      max = 50,
+     *      max = 100,
      *      minMessage = "Le titre de l'article est trop court (5 caractères minimum).",
      *      maxMessage = "Le titre de l'article est trop long (50 caractères maximum)."
      * )
@@ -59,7 +59,7 @@ class Article
      * )
      * @Assert\Length(
      *      min = 5,
-     *      max = 2000,
+     *      max = 10000,
      *      minMessage = "Le contenu de l'article est trop court (5 caractères minimum).",
      *      maxMessage = "Le contenu de l'article est trop long (2000 caractères maximum)."
      * )
